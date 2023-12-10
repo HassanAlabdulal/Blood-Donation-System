@@ -30,10 +30,10 @@ const itemMotionDesktop = {
 
 const navLinks = [
   { name: "Home", href: "/Main", id: 1 },
-  { name: "Reports", href: "ReportsPage", id: 2 },
-  { name: "Collection Drive", href: "AddCollectionDrivePage", id: 3 },
-  { name: "Donation Request", href: "ProcessRequestPage", id: 4 },
-  { name: "Users", href: "UsersEditPage", id: 5 },
+  { name: "Reports", href: "/Reports", id: 2 },
+  { name: "Collection Drive", href: "/AddCollectionDrive", id: 3 },
+  { name: "Donation Request", href: "/ProcessRequest", id: 4 },
+  { name: "Users", href: "/UsersEdit", id: 5 },
 ];
 
 const NavLinks = ({

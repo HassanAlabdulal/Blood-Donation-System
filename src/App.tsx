@@ -16,7 +16,13 @@ import OperationsHistoryAdmin from "./Components/OperationsHistoryAdmin";
 import ProcessRequest from "./Components/ProcessRequest";
 import Reports from "./Components/Reports";
 import ShowProfile from "./Components/ShowProfile";
-import UsersEdit from "./Components/ShowProfile";
+import UsersEdit from "./Components/UsersEdit";
+import AddCollectionDrive from "./Components/AddCollectionDrive";
+import AggregatedAmountReport from "./Components/AggregatedAmountReport";
+import BloodDonationsReport from "./Components/BloodDonationsReport";
+import CollectionDriveReport from "./Components/CollectionDriveReport";
+import EditProfileAdmin from "./Components/EditProfileAdmin";
+import EditProfileUser from "./Components/EditProfileUser";
 
 function App() {
   return (
@@ -42,6 +48,21 @@ function App() {
           <Route path="/Reports" element={<Reports />} />
           <Route path="/ShowProfile" element={<ShowProfile />} />
           <Route path="/UsersEdit" element={<UsersEdit />} />
+          <Route path="/AddCollectionDrive" element={<AddCollectionDrive />} />
+          <Route
+            path="/AggregatedAmountReport"
+            element={<AggregatedAmountReport />}
+          />
+          <Route
+            path="/BloodDonationsReport"
+            element={<BloodDonationsReport />}
+          />
+          <Route
+            path="/CollectionDriveReport"
+            element={<CollectionDriveReport />}
+          />
+          <Route path="/EditProfileAdmin" element={<EditProfileAdmin />} />
+          <Route path="/EditProfileUser" element={<EditProfileUser />} />
         </Routes>
       </Layout>
     </Router>
