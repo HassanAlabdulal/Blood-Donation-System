@@ -9,13 +9,13 @@ import {
   Checkbox,
 } from "@material-tailwind/react";
 
-interface MenuItem {
+interface MenuItems {
   id: string;
   label: string;
 }
 
 interface MenuWithCheckboxProps {
-  items: MenuItem[];
+  items: MenuItems[];
 }
 
 export function MenuWithCheckbox({ items }: MenuWithCheckboxProps) {
