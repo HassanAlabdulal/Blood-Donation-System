@@ -9,6 +9,14 @@ import PaymentsReport from "./Components/PaymentsReport";
 import Policy from "./Components/Policy";
 import LearnMore from "./Components/LearnMore";
 import Main from "./Components/Main";
+import ForgotPassword from "./Components/ForgotPassword";
+import NewPassword from "./Components/NewPassword";
+import Notification from "./Components/Notification";
+import OperationsHistoryAdmin from "./Components/OperationsHistoryAdmin";
+import ProcessRequest from "./Components/ProcessRequest";
+import Reports from "./Components/Reports";
+import ShowProfile from "./Components/ShowProfile";
+import UsersEdit from "./Components/ShowProfile";
 
 function App() {
   return (
@@ -23,6 +31,17 @@ function App() {
           <Route path="/PaymentsReport" element={<PaymentsReport />} />
           <Route path="/Policy" element={<Policy />} />
           <Route path="/LearnMore" element={<LearnMore />} />
+          <Route path="/ForgotPassword" element={<ForgotPassword />} />
+          <Route path="/NewPassword" element={<NewPassword />} />
+          <Route path="/Notification" element={<Notification />} />
+          <Route
+            path="/OperationsHistoryAdmin"
+            element={<OperationsHistoryAdmin />}
+          />
+          <Route path="/ProcessRequest" element={<ProcessRequest />} />
+          <Route path="/Reports" element={<Reports />} />
+          <Route path="/ShowProfile" element={<ShowProfile />} />
+          <Route path="/UsersEdit" element={<UsersEdit />} />
         </Routes>
       </Layout>
     </Router>
