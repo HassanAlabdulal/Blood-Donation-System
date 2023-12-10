@@ -1,6 +1,6 @@
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faArrowRight, faSliders } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+/* eslint-disable jsx-a11y/no-redundant-roles */
+
+// import { useState } from "react";
 import image from "../Assets/Blood donation-.png";
 
 type DonationEvent = {
@@ -106,12 +106,12 @@ export default function Main() {
     },
   ];
 
-  const navigateToDonationEventDetails = (DonationEventId: number) => {
-    // console.log(`Navigate to details of project with id: ${projectId}`);
-    window.location.href = "/ShowEventPage";
-  };
+  // const navigateToDonationEventDetails = (DonationEventId: number) => {
+  //   // console.log(`Navigate to details of project with id: ${projectId}`);
+  //   window.location.href = "/ShowEventPage";
+  // };
 
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
 
   return (
     <div className="bg-[#f7f7f7] pt-20 flex flex-col items-center min-h-screen font-roboto gap-12">
@@ -128,7 +128,7 @@ export default function Main() {
           {DonationEvents.map((DonationEvent) => (
             <li
               key={DonationEvent.id}
-              onClick={() => navigateToDonationEventDetails(DonationEvent.id)}
+              // onClick={() => navigateToDonationEventDetails(DonationEvent.id)}
               className="flex flex-col col-span-1 text-center transition duration-500 transform bg-white divide-y divide-gray-200 rounded-lg shadow cursor-pointer hover:scale-105 hover:shadow-lg"
             >
               <div className="flex flex-col flex-1 p-8">

@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
 import ProfileMenu from "./UI/ProfileMenu";
 
 const navMotion = {
