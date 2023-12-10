@@ -53,8 +53,8 @@ const diseaseItems = [
   { id: "disease10", label: "Nothing" },
 ];
 
-const ShowIcon = () => <FontAwesomeIcon icon={faEye} />;
-const HideIcon = () => <FontAwesomeIcon icon={faEyeSlash} />;
+// const ShowIcon = () => <FontAwesomeIcon icon={faEye} />;
+// const HideIcon = () => <FontAwesomeIcon icon={faEyeSlash} />;
 const MAX_STEPS = 5;
 
 const SignUp = () => {
