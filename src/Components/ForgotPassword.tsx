@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import image from "../Assets/Forgot password.png";
 
 export default function ForgotPassword() {
   return (
@@ -7,7 +9,7 @@ export default function ForgotPassword() {
       <div className="w-2/3 overflow-hidden text-gray-500 bg-gray-100 shadow-xl rounded-3xl">
         <div className="w-full md:flex">
           <div className="hidden w-1/2 px-10 py-10 bg-[#292828] md:block">
-            <img src="src/assets/Forgot password.png" alt="Forgot Password" />
+            <img src={image} alt="Forgot Password" />
           </div>
 
           <div className="w-full px-5 py-36 md:w-1/2 md:px-10">
@@ -36,14 +38,14 @@ export default function ForgotPassword() {
 
               <div className="flex flex-col -mx-3">
                 <div className="w-full px-3 mt-10">
-                  <a
-                    href="NewPasswordPage"
+                  <Link
+                    to="/NewPassword"
                     className="block w-full max-w-xs px-3 py-3 mx-auto text-center font-semibold text-lg text-white rounded-lg uppercase
                    bg-[#292828] border-2 border-[#292828] font-roboto transition-all duration-700 hover:bg-black focus:outline-none shadow-md hover:shadow-xl
                   disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none cursor-pointer"
                   >
                     Reset Password
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

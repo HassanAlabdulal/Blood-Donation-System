@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import PasswordStrengthIndicator from "./UI/PasswordStrengthIndicator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import image from "../Assets/Reset password.png";
 
 // interface PasswordStrengthIndicatorProps {
 //   strength: number;
@@ -68,7 +70,7 @@ const NewPassword: React.FC = () => {
       <div className="w-2/3 overflow-hidden text-gray-500 bg-gray-100 shadow-xl rounded-3xl">
         <div className="w-full md:flex">
           <div className="hidden w-1/2 bg-[#292828] md:block">
-            <img src="src/assets/Reset password.png" alt="Reset Password" />
+            <img src={image} alt="Reset Password" />
           </div>
           <div className="w-full px-5 py-36 md:w-1/2 md:px-10">
             <div className="mb-10 text-center">
@@ -131,13 +133,13 @@ const NewPassword: React.FC = () => {
 
             <div className="flex flex-col -mx-3">
               <div className="w-full px-3 mt-10">
-                <a
-                  href="SignInPage"
+                <Link
+                  to="/SignIn"
                   className="block w-full max-w-xs text-center mx-auto bg-[#292828] text-white font-roboto font-semibold 
                   text-lg rounded-lg px-3 py-3 uppercase shadow-md hover:shadow-xl transition-all duration-700 focus:outline-none hover:bg-black"
                 >
                   Set New Password
-                </a>
+                </Link>
               </div>
             </div>
           </div>
