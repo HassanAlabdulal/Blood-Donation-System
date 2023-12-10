@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import {
   Menu,
@@ -32,8 +33,8 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
         </MenuHandler>
         <MenuList placeholder={undefined}>
           <MenuItem className="flex items-center gap-2" placeholder={undefined}>
-            <a
-              href="ShowProfilePage"
+            <Link
+              to="/ShowProfile"
               className="flex items-center gap-2 text-left"
             >
               <svg
@@ -57,11 +58,11 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
               >
                 My Profile
               </Typography>
-            </a>
+            </Link>
           </MenuItem>
           <MenuItem className="flex items-center gap-2" placeholder={undefined}>
-            <a
-              href="EditProfileUserPage"
+            <Link
+              to="/EditProfileUser"
               className="flex items-center gap-2 text-left"
             >
               <svg
@@ -86,11 +87,11 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
               >
                 Edit Profile
               </Typography>
-            </a>
+            </Link>
           </MenuItem>
           <MenuItem className="flex items-center gap-2" placeholder={undefined}>
-            <a
-              href="NotificationPage"
+            <Link
+              to="/Notification"
               className="flex items-center gap-2 text-left"
             >
               <svg
@@ -116,7 +117,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
               >
                 Notifications
               </Typography>
-            </a>
+            </Link>
           </MenuItem>
 
           <hr className="my-2 border-blue-gray-50" />

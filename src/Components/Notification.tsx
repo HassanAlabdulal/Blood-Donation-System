@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faDollarSign } from "@fortawesome/free-solid-svg-icons";
+import notificationImage from "../Assets/notification.gif";
 
 interface NotificationType {
   id: number;
@@ -103,7 +104,7 @@ export default function Notification() {
         {/* Image */}
         <div className="flex justify-center w-full">
           <img
-            src="src/assets/notification.gif"
+            src={notificationImage}
             alt="Notification Center"
             className="w-1/2 h-1/2 max-xl:w-80 max-xl:h-80 max-lg:mt-24"
           />
