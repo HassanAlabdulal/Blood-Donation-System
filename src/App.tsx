@@ -1,14 +1,21 @@
 import React from "react";
-import Layout from "./Components/Layout"; // Import the Layout component
-import HomePage from "./Components/HomePage"; // Import the HomePage component
-import "./App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Layout from "./Components/Layout";
+import HomePage from "./Components/HomePage";
+import Main from "./Components/Main";
+// import "./App.css";
 
 function App() {
   return (
-    <Layout>
-      {/* Layout will automatically include Nav and Footer */}
-      <HomePage /> {/* This is where you render the homepage content */}
-    </Layout>
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/Main" element={<Main />} />
+          {/* Define other routes here */}
+        </Routes>
+      </Layout>
+    </Router>
   );
 }
 
