@@ -113,20 +113,20 @@ export default function Nav() {
         transition={{ delay: 0.35 }}
         className="hidden gap-3 lg:flex lg:items-center lg:justify-center lg:text-sm"
       >
-        <a
-          href="/SignUp"
+        <Link
+          to="/SignUp"
           className="middle none center rounded-lg bg-[#292828] border-2 border-[#292828] py-2 px-4.5 lg:py-1.5 lg:px-3.5 text-md font-bold font-nunito text-white roundedtransition-all duration-700 hover:bg-black focus:outline-none shadow-md hover:shadow-xl disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none cursor-pointer"
           data-ripple-light="true"
         >
           Sign up
-        </a>
-        <a
-          href="/SignIn"
+        </Link>
+        <Link
+          to="/SignIn"
           className="middle none center rounded-lg border-2 border-[#121212] py-2 px-5 lg:py-1.5 lg:px-4 text-md font-bold font-nunito cursor-pointer mr-2 text-[#121212] transition-all hover:opacity-75 focus:ring focus:ring-[#292828] active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           data-ripple-dark="true"
         >
           Sign in
-        </a>
+        </Link>
 
         <ProfileMenu toggled={toggled} />
       </motion.div>

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function LearnMore() {
   useEffect(() => {
@@ -48,8 +49,8 @@ export default function LearnMore() {
               beacon of hope.
             </p>
             <div className="flex items-center gap-3">
-              <a
-                href="SignUpPage"
+              <Link
+                to="/SignUp"
                 className="flex select-none items-center justify-center cursor-pointer
                  rounded-lg bg-[#292828] border-2 border-[#292828] px-[1.693rem]
                    py-2 text-base font-bold text-white align-middle
@@ -58,7 +59,7 @@ export default function LearnMore() {
                 data-ripple-dark="true"
               >
                 Sign up
-              </a>
+              </Link>
 
               <a
                 className="flex select-none items-center justify-center rounded-lg border-2 border-[#292828]
@@ -161,7 +162,8 @@ export default function LearnMore() {
             </div>
             <img
               className="w-6/12 mx-auto mt-10"
-              src="src/assets/blood types.png"
+              src="../Assets/blood types.png"
+              alt="blood types"
             />
           </div>
         </div>

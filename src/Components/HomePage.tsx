@@ -2,6 +2,7 @@ import Lottie from "lottie-react";
 import animationData from "../Assets/Animations/Homapage-Animation.json";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
   useEffect(() => {
@@ -44,8 +45,8 @@ export default function HomePage() {
         </motion.div>
 
         <div className="flex items-center gap-3">
-          <a
-            href="MainPage"
+          <Link
+            to="/Main"
             className="flex select-none items-center cursor-pointer justify-center rounded-lg bg-[#292828] border-2 border-[#292828] px-3 py-2.5
              text-base font-bold text-white align-middle transition-all duration-700 hover:bg-black focus:outline-none shadow-md hover:shadow-xl
                disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
@@ -68,7 +69,7 @@ export default function HomePage() {
                 d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
               ></path>
             </svg>
-          </a>
+          </Link>
 
           <a
             className="flex select-none items-center justify-center rounded-lg border-2 border-[#292828]
