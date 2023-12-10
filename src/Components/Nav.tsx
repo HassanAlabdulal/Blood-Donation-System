@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+
 // import ProfileMenu from "../components/UI/ProfileMenu";
 
 const navMotion = {
@@ -43,13 +45,9 @@ const NavLinks = ({
 }) => (
   <div className={className}>
     {navLinks.map(({ name, href, id }) => (
-      <motion.a
-        key={id}
-        variants={isMobile ? itemMotion : itemMotionDesktop}
-        href={href}
-      >
-        {name}
-      </motion.a>
+      <motion.div key={id} variants={isMobile ? itemMotion : itemMotionDesktop}>
+        <Link to={href}>{name}</Link>
+      </motion.div>
     ))}
   </div>
 );
