@@ -17,6 +17,7 @@
     "@types/react-dom": "^18.2.17",
     "autoprefixer": "^10.4.16",
     "framer-motion": "^10.16.16",
+    "lottie-react": "^2.4.0",
     "postcss": "^8.4.32",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
