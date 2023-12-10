@@ -30,13 +30,13 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/LearnMore" element={<LearnMore />} />
           <Route path="/Main" element={<Main />} />
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/SignIn" element={<SignIn />} />
           <Route path="/Payment" element={<Payment />} />
           <Route path="/PaymentsReport" element={<PaymentsReport />} />
           <Route path="/Policy" element={<Policy />} />
-          <Route path="/LearnMore" element={<LearnMore />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/NewPassword" element={<NewPassword />} />
           <Route path="/Notification" element={<Notification />} />

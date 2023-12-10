@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import bloodImage from "../Assets/Blood donation-.png";
+import bloodTypes from "../Assets/blood types.png";
 
 export default function LearnMore() {
   useEffect(() => {
@@ -75,7 +77,7 @@ export default function LearnMore() {
           <div className="w-full px-4 mt-16 md:w-1/2">
             <img
               className="w-full h-auto mx-auto max-md:max-w-md md:w-5/6 md:h-5/6"
-              src="src/assets/Blood donation-.png"
+              src={bloodImage}
               alt="Project Creator"
             />
           </div>
@@ -162,7 +164,7 @@ export default function LearnMore() {
             </div>
             <img
               className="w-6/12 mx-auto mt-10"
-              src="../Assets/blood types.png"
+              src={bloodTypes}
               alt="blood types"
             />
           </div>
