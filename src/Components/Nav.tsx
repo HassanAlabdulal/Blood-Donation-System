@@ -92,14 +92,14 @@ export default function Nav() {
             <motion.a
               className="w-full py-1 text-white  bg-[#292828] rounded transition-all duration-700 hover:bg-black focus:outline-none shadow-md hover:shadow-xl
               disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              href="SignInPage"
+              href="/SignIn"
             >
               Sign in
             </motion.a>
             <motion.a
               className="w-full h-10 tracking-wide text-[#121212] transition-all duration-700 border-2 border-[#121212] rounded hover:bg-[#121212] hover:text-white ocus:outline-none shadow-md hover:shadow-xl
               disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none "
-              href="SignUpPage"
+              href="/SignUp"
             >
               Sign up
             </motion.a>
@@ -114,14 +114,14 @@ export default function Nav() {
         className="hidden gap-3 lg:flex lg:items-center lg:justify-center lg:text-sm"
       >
         <a
-          href="SignUpPage"
+          href="/SignUp"
           className="middle none center rounded-lg bg-[#292828] border-2 border-[#292828] py-2 px-4.5 lg:py-1.5 lg:px-3.5 text-md font-bold font-nunito text-white roundedtransition-all duration-700 hover:bg-black focus:outline-none shadow-md hover:shadow-xl disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none cursor-pointer"
           data-ripple-light="true"
         >
           Sign up
         </a>
         <a
-          href="SignInPage"
+          href="/SignIn"
           className="middle none center rounded-lg border-2 border-[#121212] py-2 px-5 lg:py-1.5 lg:px-4 text-md font-bold font-nunito cursor-pointer mr-2 text-[#121212] transition-all hover:opacity-75 focus:ring focus:ring-[#292828] active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           data-ripple-dark="true"
         >

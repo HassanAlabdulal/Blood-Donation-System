@@ -16,7 +16,7 @@ import {
   Option,
 } from "@material-tailwind/react";
 import {
-  BanknotesIcon,
+  // BanknotesIcon,
   CreditCardIcon,
   LockClosedIcon,
 } from "@heroicons/react/24/solid";
@@ -55,12 +55,13 @@ export default function Payment() {
 
   return (
     <div className="flex items-center justify-center w-full h-screen">
-      <Card className="w-full max-w-[26rem]">
+      <Card className="w-full max-w-[26rem]" placeholder={undefined}>
         <CardHeader
           color="gray"
           floated={false}
           shadow={false}
           className="grid px-4 py-8 m-0 text-center place-items-center"
+          placeholder={undefined}
         >
           <div className="h-20 p-6 mb-4 text-white">
             {type === "card" ? (
@@ -73,17 +74,25 @@ export default function Payment() {
               />
             )}
           </div>
-          <Typography variant="h5" color="white">
+          <Typography variant="h5" color="white" placeholder={undefined}>
             Payment Form
           </Typography>
         </CardHeader>
-        <CardBody>
+        <CardBody placeholder={undefined}>
           <Tabs value={type} className="overflow-visible">
-            <TabsHeader className="relative z-0 ">
-              <Tab value="card" onClick={() => setType("card")}>
+            <TabsHeader className="relative z-0 " placeholder={undefined}>
+              <Tab
+                value="card"
+                onClick={() => setType("card")}
+                placeholder={undefined}
+              >
                 Pay with Card
               </Tab>
-              <Tab value="paypal" onClick={() => setType("paypal")}>
+              <Tab
+                value="paypal"
+                onClick={() => setType("paypal")}
+                placeholder={undefined}
+              >
                 Pay with PayPal
               </Tab>
             </TabsHeader>
@@ -100,6 +109,7 @@ export default function Payment() {
                   x: type === "card" ? 400 : -400,
                 },
               }}
+              placeholder={undefined}
             >
               <TabPanel value="card" className="p-0">
                 <form className="flex flex-col gap-4 mt-12">
@@ -108,6 +118,7 @@ export default function Payment() {
                       variant="small"
                       color="blue-gray"
                       className="mb-2 font-medium"
+                      placeholder={undefined}
                     >
                       Your Email
                     </Typography>
@@ -127,6 +138,7 @@ export default function Payment() {
                       variant="small"
                       color="blue-gray"
                       className="mb-2 font-medium "
+                      placeholder={undefined}
                     >
                       Card Details
                     </Typography>
@@ -151,6 +163,7 @@ export default function Payment() {
                           variant="small"
                           color="blue-gray"
                           className="mb-2 font-medium"
+                          placeholder={undefined}
                         >
                           Expires
                         </Typography>
@@ -174,6 +187,7 @@ export default function Payment() {
                           variant="small"
                           color="blue-gray"
                           className="mb-2 font-medium"
+                          placeholder={undefined}
                         >
                           CVC
                         </Typography>
@@ -193,6 +207,7 @@ export default function Payment() {
                       variant="small"
                       color="blue-gray"
                       className="mb-2 font-medium"
+                      placeholder={undefined}
                     >
                       Holder Name
                     </Typography>
@@ -205,11 +220,14 @@ export default function Payment() {
                       crossOrigin={undefined}
                     />
                   </div>
-                  <Button size="lg">Pay Now</Button>
+                  <Button size="lg" placeholder={undefined}>
+                    Pay Now
+                  </Button>
                   <Typography
                     variant="small"
                     color="gray"
                     className="flex items-center justify-center gap-2 mt-2 font-medium opacity-60"
+                    placeholder={undefined}
                   >
                     <LockClosedIcon className="-mt-0.5 h-4 w-4" /> Payments are
                     secure and encrypted
@@ -223,6 +241,7 @@ export default function Payment() {
                       variant="paragraph"
                       color="blue-gray"
                       className="mb-4 font-medium"
+                      placeholder={undefined}
                     >
                       Personal Details
                     </Typography>
@@ -230,6 +249,7 @@ export default function Payment() {
                       variant="small"
                       color="blue-gray"
                       className="mb-2 font-medium"
+                      placeholder={undefined}
                     >
                       Your Email
                     </Typography>
@@ -249,6 +269,7 @@ export default function Payment() {
                       variant="paragraph"
                       color="blue-gray"
                       className="mb-4 font-medium"
+                      placeholder={undefined}
                     >
                       Billing Address
                     </Typography>
@@ -256,6 +277,7 @@ export default function Payment() {
                       variant="small"
                       color="blue-gray"
                       className="mb-2 font-medium"
+                      placeholder={undefined}
                     >
                       Country
                     </Typography>
@@ -278,6 +300,7 @@ export default function Payment() {
                       variant="small"
                       color="blue-gray"
                       className="mt-4 -mb-2 font-medium"
+                      placeholder={undefined}
                     >
                       Postal Code
                     </Typography>
@@ -291,11 +314,14 @@ export default function Payment() {
                       crossOrigin={undefined}
                     />
                   </div>
-                  <Button size="lg">pay with paypal</Button>
+                  <Button size="lg" placeholder={undefined}>
+                    pay with paypal
+                  </Button>
                   <Typography
                     variant="small"
                     color="gray"
                     className="flex items-center justify-center gap-2 font-medium opacity-60"
+                    placeholder={undefined}
                   >
                     <LockClosedIcon className="-mt-0.5 h-4 w-4" /> Payments are
                     secure and encrypted
