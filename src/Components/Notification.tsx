@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faDollarSign } from "@fortawesome/free-solid-svg-icons";
 import notificationImage from "../Assets/notification.gif";
+import { Link } from "react-router-dom";
 
 interface NotificationType {
   id: number;
@@ -38,14 +39,14 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
           {notification.isCompleted ? (
             <FontAwesomeIcon icon={faCheck} className="text-green-500" />
           ) : notification.type === "Request for Donate" ? (
-            <a
+            <Link
               className={payButtonClass}
               onClick={() => onPay(notification)}
-              href="PaymentPage"
+              to="/Payment"
             >
               <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
               Pay
-            </a>
+            </Link>
           ) : (
             <button
               className={acceptButtonClass}
