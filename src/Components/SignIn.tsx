@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 
@@ -255,12 +256,12 @@ export default function SignIn() {
               </div>
 
               <div className="mb-20 text-right">
-                <a
-                  href="ForgotPasswordPage"
+                <Link
+                  to="/ForgotPassword"
                   className="inline-block text-[#809bd0] hover:text-[#3e60a3] hover:underline transition-all duration-500"
                 >
                   Forgot password?
-                </a>
+                </Link>
               </div>
 
               <div className="flex flex-col -mx-3">
@@ -277,7 +278,7 @@ export default function SignIn() {
                   <p className="w-full max-w-xs px-3 mx-auto text-center text-[#121212]">
                     Don't have an account?{" "}
                     <span className="text-[#809bd0] hover:text-[#3e60a3] hover:underline transition-all duration-500">
-                      <a href="SignUpPage">Sign up</a>
+                      <Link to="/SignUp">Sign up</Link>
                     </span>
                   </p>
                 </div>
