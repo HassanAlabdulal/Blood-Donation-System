@@ -32,14 +32,21 @@ export function DefaultMenu({ items }: DefaultMenuProps) {
       }}
     >
       <MenuHandler>
-        <Button className="text-sm tracking-wide normal-case bg-white border border-[#121212] text-[#212121]">
+        <Button
+          className="text-sm tracking-wide normal-case bg-white border border-[#121212] text-[#212121]"
+          placeholder={undefined}
+        >
           {" "}
           {selectedItem || "Blood Type"}
         </Button>
       </MenuHandler>
-      <MenuList>
+      <MenuList placeholder={undefined}>
         {items.map((item) => (
-          <MenuItem key={item.id} onClick={() => handleItemClick(item.label)}>
+          <MenuItem
+            key={item.id}
+            onClick={() => handleItemClick(item.label)}
+            placeholder={undefined}
+          >
             {item.label}
           </MenuItem>
         ))}

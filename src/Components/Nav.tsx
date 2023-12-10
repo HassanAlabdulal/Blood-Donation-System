@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-// import ProfileMenu from "../components/UI/ProfileMenu";
+import ProfileMenu from "./UI/ProfileMenu";
 
 const navMotion = {
   visible: {
@@ -128,7 +128,7 @@ export default function Nav() {
           Sign in
         </a>
 
-        {/* <ProfileMenu toggled={toggled} /> */}
+        <ProfileMenu toggled={toggled} />
       </motion.div>
 
       {/* Hamburger Toggle */}

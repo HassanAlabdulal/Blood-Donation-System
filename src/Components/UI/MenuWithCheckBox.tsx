@@ -38,14 +38,17 @@ export function MenuWithCheckbox({ items }: MenuWithCheckboxProps) {
   return (
     <Menu dismiss={{ itemPress: false }}>
       <MenuHandler>
-        <Button className="text-sm tracking-wide normal-case bg-white border border-[#121212] text-[#212121]">
+        <Button
+          className="text-sm tracking-wide normal-case bg-white border border-[#121212] text-[#212121]"
+          placeholder={undefined}
+        >
           {" "}
           {selectedItemsString || "Diseases"}
         </Button>
       </MenuHandler>
-      <MenuList>
+      <MenuList placeholder={undefined}>
         {items.map((item) => (
-          <MenuItem key={item.id} className="p-0">
+          <MenuItem key={item.id} className="p-0" placeholder={undefined}>
             <label
               htmlFor={item.id}
               className="flex items-center gap-2 p-2 cursor-pointer"

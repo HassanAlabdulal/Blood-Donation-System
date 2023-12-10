@@ -27,10 +27,11 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
             alt="Tania Andrew"
             className="cursor-pointer"
             src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90oy1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+            placeholder={undefined}
           />
         </MenuHandler>
-        <MenuList>
-          <MenuItem className="flex items-center gap-2">
+        <MenuList placeholder={undefined}>
+          <MenuItem className="flex items-center gap-2" placeholder={undefined}>
             <a
               href="ShowProfilePage"
               className="flex items-center gap-2 text-left"
@@ -49,12 +50,16 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
                   fill="#90A4AE"
                 />
               </svg>
-              <Typography variant="small" className="font-medium">
+              <Typography
+                variant="small"
+                className="font-medium"
+                placeholder={undefined}
+              >
                 My Profile
               </Typography>
             </a>
           </MenuItem>
-          <MenuItem className="flex items-center gap-2">
+          <MenuItem className="flex items-center gap-2" placeholder={undefined}>
             <a
               href="EditProfileUserPage"
               className="flex items-center gap-2 text-left"
@@ -74,12 +79,16 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
                 />
               </svg>
 
-              <Typography variant="small" className="font-medium">
+              <Typography
+                variant="small"
+                className="font-medium"
+                placeholder={undefined}
+              >
                 Edit Profile
               </Typography>
             </a>
           </MenuItem>
-          <MenuItem className="flex items-center gap-2">
+          <MenuItem className="flex items-center gap-2" placeholder={undefined}>
             <a
               href="NotificationPage"
               className="flex items-center gap-2 text-left"
@@ -100,14 +109,21 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
                 />
               </svg>
 
-              <Typography variant="small" className="font-medium">
+              <Typography
+                variant="small"
+                className="font-medium"
+                placeholder={undefined}
+              >
                 Notifications
               </Typography>
             </a>
           </MenuItem>
 
           <hr className="my-2 border-blue-gray-50" />
-          <MenuItem className="flex items-center gap-2 ">
+          <MenuItem
+            className="flex items-center gap-2 "
+            placeholder={undefined}
+          >
             <svg
               width="16"
               height="14"
@@ -122,7 +138,11 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
                 fill="#90A4AE"
               />
             </svg>
-            <Typography variant="small" className="font-medium">
+            <Typography
+              variant="small"
+              className="font-medium"
+              placeholder={undefined}
+            >
               Sign Out
             </Typography>
           </MenuItem>

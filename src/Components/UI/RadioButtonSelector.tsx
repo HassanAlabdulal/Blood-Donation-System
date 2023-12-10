@@ -20,15 +20,15 @@ type RadioButtonProps = {
 
 const RadioButtonSelector: React.FC<RadioButtonProps> = ({ name, options }) => {
   return (
-    <Card className="w-full max-w-[28rem] bg-white">
-      <List className="flex-row">
+    <Card className="w-full max-w-[28rem] bg-white" placeholder={undefined}>
+      <List className="flex-row" placeholder={undefined}>
         {options.map((option) => (
-          <ListItem className="p-0" key={option.id}>
+          <ListItem className="p-0" key={option.id} placeholder={undefined}>
             <label
               htmlFor={option.id}
               className="flex items-center w-full px-3 py-2 cursor-pointer"
             >
-              <ListItemPrefix className="mr-3">
+              <ListItemPrefix className="mr-3" placeholder={undefined}>
                 <Radio
                   name={name}
                   id={option.id}
@@ -43,6 +43,7 @@ const RadioButtonSelector: React.FC<RadioButtonProps> = ({ name, options }) => {
               <Typography
                 color="blue-gray"
                 className="font-medium text-[#121212]"
+                placeholder={undefined}
               >
                 {option.label}
               </Typography>

@@ -10,7 +10,11 @@ export default function TableWithStripedRows({
   rows,
 }: TableWithStripedRowsProps) {
   return (
-    <Card className="w-full h-full overflow-scroll">
+    <Card
+      className="w-full h-full overflow-scroll"
+      // children={undefined}
+      placeholder={undefined}
+    >
       <table className="w-full text-center table-auto min-w-max">
         <thead>
           <tr>
@@ -23,6 +27,8 @@ export default function TableWithStripedRows({
                   variant="small"
                   color="white"
                   className="font-bold leading-none"
+                  // children={undefined}
+                  placeholder={undefined}
                 >
                   {header}
                 </Typography>
@@ -42,6 +48,8 @@ export default function TableWithStripedRows({
                     variant="small"
                     color="blue-gray"
                     className="font-normal"
+                    // children={undefined}
+                    placeholder={undefined}
                   >
                     {value}
                   </Typography>
