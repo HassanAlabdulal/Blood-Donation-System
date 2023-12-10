@@ -44,7 +44,7 @@ export default function UsersEdit() {
   );
 
   return (
-    <div className="bg-[#f7f7f7] pt-16 flex flex-col items-center min-h-screen font-roboto">
+    <div className="bg-[#f7f7f7] pt-16 flex flex-col justify-center mt-16 py-10 items-center w-full min-h-screen font-roboto">
       <div className="flex flex-col items-center w-full max-w-4xl p-8 overflow-hidden bg-white rounded-lg shadow-lg">
         {/* Title */}
         <h1 className="w-full mb-4 text-2xl font-semibold text-center text-gray-900">
