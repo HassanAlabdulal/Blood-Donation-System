@@ -1,6 +1,7 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faSliders } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faArrowRight, faSliders } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import image from "../Assets/Blood donation-.png";
 
 type DonationEvent = {
   id: number;
@@ -23,7 +24,7 @@ export default function Main() {
       location: "City Hall Auditorium",
       description:
         "Support our city's healthcare system by participating in the annual City Hall Blood Drive. Your donation matters!",
-      imageUrl: "src/assets/Blood donation-.png",
+      imageUrl: `${image}`,
       category: "Community",
     },
     {
@@ -34,7 +35,7 @@ export default function Main() {
       location: "Local Hospital Conference Room",
       description:
         "Give back to those who care for us. Donate blood and support the healthcare heroes who save lives every day.",
-      imageUrl: "src/assets/Blood donation-.png",
+      imageUrl: `${image}`,
       category: "Health",
     },
     {
@@ -45,7 +46,7 @@ export default function Main() {
       location: "University Commons Area",
       description:
         "Students and staff, show your college spirit and help save lives by donating blood this summer.",
-      imageUrl: "src/assets/Blood donation-.png",
+      imageUrl: `${image}`,
       category: "Education",
     },
     {
@@ -56,7 +57,7 @@ export default function Main() {
       location: "Neighborhood Rec Center",
       description:
         "Join your neighbors in being a local hero! Your blood donation can save up to three lives.",
-      imageUrl: "src/assets/Blood donation-.png",
+      imageUrl: `${image}`,
       category: "Community",
     },
     {
@@ -67,7 +68,7 @@ export default function Main() {
       location: "Corporate HQ Courtyard",
       description:
         "Our company is hosting a blood drive to support local blood banks. Employees and the public are welcome!",
-      imageUrl: "src/assets/Blood donation-.png",
+      imageUrl: `${image}`,
       category: "Corporate",
     },
     {
@@ -78,7 +79,7 @@ export default function Main() {
       location: "City Sports Arena",
       description:
         "Athletes and fans, team up to save lives! Your donation is more than just blood; it's a lifeline.",
-      imageUrl: "src/assets/Blood donation-.png",
+      imageUrl: `${image}`,
       category: "Sports",
     },
     {
@@ -89,7 +90,7 @@ export default function Main() {
       location: "Central Fire Station",
       description:
         "Join our first responders in a blood drive to help our community's hospitals. Every pint counts!",
-      imageUrl: "src/assets/Blood donation-.png",
+      imageUrl: `${image}`,
       category: "First Responders",
     },
     {
@@ -100,7 +101,7 @@ export default function Main() {
       location: "Downtown Convention Center",
       description:
         "The gift of blood is the gift of life. During this season of giving, please consider donating blood to help those in need.",
-      imageUrl: "src/assets/Blood donation-.png",
+      imageUrl: `${image}`,
       category: "Seasonal",
     },
   ];
