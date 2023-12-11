@@ -1,5 +1,6 @@
 import { Textarea } from "@material-tailwind/react";
 import React, { useState } from "react";
+import {supabase} from '../utils/supabase'
 
 export default function AddCollectionDrive() {
   const [title, setTitle] = useState("");
@@ -29,9 +30,21 @@ export default function AddCollectionDrive() {
     }
   };
 
-  const handleSubmit = (event: { preventDefault: () => void }) => {
+  const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    console.log({ title, location, category, description, startDate, endDate });
+    const {error} = await supabase
+    .from('DonationEvent')
+    .insert({
+      startDate,
+      endDate,
+      location,
+      title,
+      description,
+      adminId: "70d7059d-3581-451a-811a-002236cb91bf", // TO BE Done
+      category
+    })
+
+    if (error){console.log(error)}
   };
 
   return (

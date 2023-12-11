@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {supabase} from "../utils/supabase"
 
 type Recipient = {
   id: string;
@@ -42,11 +43,26 @@ export default function ProcessRequest() {
     setSelectedEvent(event.target.value);
   };
 
-  const handleRecipientIdChange = (event: {
+  const handleRecipientIdChange = async (event: {
     target: { value: React.SetStateAction<string> };
   }) => {
     setRecipientIdInput(event.target.value);
     setShowSuggestions(true);
+
+    const { data, error } = await supabase
+    .from('profiles')
+    .select()
+    .eq('id', event.target.value)
+
+    // console.log(data.)
+
+    if (data){
+      setRecipientData({
+        bloodType: data[0].bloodType,
+        name: data[0].full_name,
+        id: data[0].id
+      })
+    }
   };
 
   const handleSelectRecipient = (recipient: Recipient) => {
