@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 
 import {
   Menu,
@@ -16,10 +16,15 @@ interface MenuItems {
 
 interface MenuWithCheckboxProps {
   items: MenuItems[];
+  onSelectedItemsChange: (selectedItems: Set<string>) => void;
 }
 
-export function MenuWithCheckbox({ items }: MenuWithCheckboxProps) {
+export function MenuWithCheckbox({ items, onSelectedItemsChange }: MenuWithCheckboxProps) {
   const [selectedItems, setSelectedItems] = useState(new Set<string>());
+
+  useEffect(() => {
+    onSelectedItemsChange(selectedItems);
+  }, [selectedItems, onSelectedItemsChange]);
 
   const handleCheckboxChange = (label: string, isChecked: boolean) => {
     setSelectedItems((prevSelectedItems) => {
@@ -29,6 +34,7 @@ export function MenuWithCheckbox({ items }: MenuWithCheckboxProps) {
       } else {
         newSelectedItems.delete(label);
       }
+      onSelectedItemsChange(newSelectedItems); 
       return newSelectedItems;
     });
   };

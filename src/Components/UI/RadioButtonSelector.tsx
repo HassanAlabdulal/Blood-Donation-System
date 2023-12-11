@@ -16,9 +16,10 @@ export type RadioButtonOption = {
 type RadioButtonProps = {
   name: string;
   options: RadioButtonOption[];
+  onChange: (selectedId: string) => void;
 };
 
-const RadioButtonSelector: React.FC<RadioButtonProps> = ({ name, options }) => {
+const RadioButtonSelector: React.FC<RadioButtonProps> = ({ name, options, onChange }) => {
   return (
     <Card className="w-full max-w-[28rem] bg-white" placeholder={undefined}>
       <List className="flex-row" placeholder={undefined}>
@@ -34,10 +35,12 @@ const RadioButtonSelector: React.FC<RadioButtonProps> = ({ name, options }) => {
                   id={option.id}
                   ripple={false}
                   className="hover:before:opacity-0"
+                  
                   containerProps={{
                     className: "p-0",
                   }}
                   crossOrigin={undefined}
+                  onChange={() => onChange(option.id)}
                 />
               </ListItemPrefix>
               <Typography

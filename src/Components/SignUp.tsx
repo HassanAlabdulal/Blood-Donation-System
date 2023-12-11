@@ -4,6 +4,7 @@ import PasswordStrengthIndicator from "./UI/PasswordStrengthIndicator";
 import { MenuWithCheckbox } from "./UI/MenuWithCheckBox";
 import { DefaultMenu } from "./UI/DefaultMenu";
 import RadioButtonSelector from "./UI/RadioButtonSelector";
+import {supabase} from "../utils/supabase"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -70,6 +71,31 @@ const SignUp = () => {
 
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [age, setAge] = useState<number | "">("");
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
+  const [street, setStreet] = useState("");
+  const [pCode, setPCode] = useState("");
+  const [weight, setWeight] = useState(0);
+  const [phone, setPhone] = useState("");
+  const [full_name, setName] = useState("");
+  const [nationalID, setNationalID] = useState("");
+  const [bloodType, setSelectedBloodType] = useState("");
+  const handleBloodTypeChange = (selectedLabel: string) => {
+    setSelectedBloodType(selectedLabel);
+  };
+  const [selectedOption, setSelectedOption] = useState<string>('');
+
+  // Function to update the state
+  const handleOptionChange = (selectedId: string) => {
+    setSelectedOption(selectedId);
+  };
+
+  const [selectedDiseases, setSelectedDiseases] = useState(new Set<string>());
+
+  const handleDiseaseSelectionChange = (newSelectedItems: Set<string>) => {
+    setSelectedDiseases(newSelectedItems);
+  };
+
   useEffect(() => {
     if (dateOfBirth) {
       const today = new Date();
@@ -103,12 +129,7 @@ const SignUp = () => {
     setPasswordStrength(checkPasswordStrength(password));
   };
 
-  //   const handleSignUp = async () => {
-  //     const supabase = createSupabaseBrowser();
-  //     const { data, error } = await supabase.auth.signUp({ email, password });
-  //     if (error) return console.error(error);
-  //     if (data) return console.log(data);
-  //   };
+    
 
   const handlePolicyClick = () => {
     setShowPolicy(true);
@@ -123,9 +144,86 @@ const SignUp = () => {
     setFormStep((currentStep) => currentStep + 1);
   };
 
+  const handleSignUp =async () => {
+    try{
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if (error) {
+        console.log(error)
+        throw error
+      }
+
+      const user = data.user;
+      if (user === null) throw new Error("User is null");
+
+      const { error: profileError } = await supabase.from("profiles").upsert({
+        id: user.id ?? "048cfcca-b936-45e1-b02a-b208945b48cd", 
+        avatar_url: null,
+        website:null,
+        username: email,
+        DoB:dateOfBirth,
+        weight,
+        phone,
+        full_name,
+        city,
+        country,
+        street,
+        nationalID,
+        postalCode: pCode,
+        bloodType,
+      });
+      if (profileError) 
+      {throw profileError}
+      
+      if(selectedOption === "option1"){
+        const { error } = await supabase
+        .from('Donor')
+        .insert({PatientId: user.id })
+
+        if(error){throw error}
+
+      }
+      else if(selectedOption === "option2"){
+        const { error } = await supabase
+        .from('Recipient')
+        .insert({PatientId: user.id })
+
+        if(error){throw error}
+        
+      }
+
+      if (selectedDiseases.size > 0 || !selectedDiseases.has("Nothing") ){
+        const { error } = await supabase
+        .from('MedicalHistory')
+        .insert({patientID: user.id })
+
+        if(error){throw error}
+
+        else{
+          const selectedDiseasesArray = Array.from(selectedDiseases).map(disease => ({
+            medicalPID: user.id,
+            Disease: disease
+          }));
+          console.log(selectedDiseasesArray)
+          
+          const { error } = await supabase
+            .from('Diseases')
+            .insert(selectedDiseasesArray);
+  
+          if(error){throw error}
+
+          
+        }
+      }
+
+    }
+    catch{
+      console.error("Error during sign up:");
+    }
+  }
+
   const renderButton = () => {
     if (formStep > 4) {
-      //   handleSignUp();
+        handleSignUp();
       return undefined;
     } else if (formStep === 4) {
       return (
@@ -212,6 +310,8 @@ const SignUp = () => {
                     type="text"
                     className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
                     placeholder="Hassan Alabdulal"
+                    value={full_name}
+                    onChange={e => setName(e.target.value)}
                   />
                 </div>
                 <label className="px-1 mb-2 text-xs font-semibold">
@@ -227,6 +327,8 @@ const SignUp = () => {
                     type="text"
                     className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
                     placeholder="1111111111"
+                    value={nationalID}
+                    onChange={e => setNationalID(e.target.value)}
                   />
                 </div>
                 <label className="px-1 mb-2 text-xs font-semibold">
@@ -242,6 +344,8 @@ const SignUp = () => {
                     type="text"
                     className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
                     placeholder="+996555555555"
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
                   />
                 </div>
                 <label className="px-1 mt-3 mb-2 text-xs font-semibold">
@@ -251,6 +355,7 @@ const SignUp = () => {
                   <RadioButtonSelector
                     name="Status"
                     options={userStatusOptions}
+                    onChange={handleOptionChange}
                   />
                 </div>
               </section>
@@ -400,20 +505,23 @@ const SignUp = () => {
                     </i>
                   </div>
                   <input
-                    type="text"
+                    type="number"
                     className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
                     placeholder="80kg"
+                    value={weight}
+                    onChange={e => setWeight(e.target.valueAsNumber)}
                   />
                 </div>
                 <label className="px-1 mb-2 text-xs font-semibold">
                   Blood Type
                 </label>
-                <DefaultMenu items={bloodTypes} />
-
+                <DefaultMenu items={bloodTypes} onItemSelect={handleBloodTypeChange} />
+                
                 <label className="px-1 mt-4 mb-2 text-xs font-semibold">
                   Diseases
                 </label>
-                <MenuWithCheckbox items={diseaseItems} />
+                <MenuWithCheckbox items={diseaseItems} onSelectedItemsChange={handleDiseaseSelectionChange}/>
+                
               </section>
             )}
 
@@ -433,6 +541,8 @@ const SignUp = () => {
                     type="text"
                     className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
                     placeholder="Saudi Arabia"
+                    value={country}
+                    onChange={e => setCountry(e.target.value)}
                   />
                 </div>
                 <label className="px-1 mb-2 text-xs font-semibold">City</label>
@@ -446,6 +556,8 @@ const SignUp = () => {
                     type="text"
                     className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
                     placeholder="Dhahran"
+                    value={city}
+                    onChange={e => setCity(e.target.value)}
                   />
                 </div>
                 <label className="px-1 mb-2 text-xs font-semibold">
@@ -461,6 +573,8 @@ const SignUp = () => {
                     type="text"
                     className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
                     placeholder="Abdullah Ibn Al Abbas Street"
+                    value={street}
+                    onChange={e => setStreet(e.target.value)}
                   />
                 </div>
                 <label className="px-1 mb-2 text-xs font-semibold">
@@ -476,6 +590,8 @@ const SignUp = () => {
                     type="text"
                     className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
                     placeholder="32227"
+                    value={pCode}
+                    onChange={e => setPCode(e.target.value)}
                   />
                 </div>
               </section>
@@ -492,12 +608,12 @@ const SignUp = () => {
                   <span className="ml-2">
                     I agree with{" "}
                     <span>
-                      <button
+                      <a
                         onClick={handlePolicyClick}
                         className="text-[#809bd0] underline cursor-pointer"
                       >
                         privacy and policy
-                      </button>
+                      </a>
                     </span>{" "}
                   </span>
                 </div>
