@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {supabase} from "../utils/supabase"
 
 type Recipient = {
@@ -7,39 +7,48 @@ type Recipient = {
   bloodType: string;
 };
 
+type EventList = {
+  id: string;
+  name: string;
+}
+
+
+type DonationEvent = {
+  eventId: number;
+  title: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  description: string;
+  imageUrl: string;
+  category: string;
+};
 export default function ProcessRequest() {
-  const [events] = useState([
-    { id: "event1", name: "Annual Blood Drive" },
-    { id: "event2", name: "Community Blood Donation" },
-  ]);
+
+
+  const [error, setError] = useState<string | null>(null);
+
+
+  const [events, setEvents] = useState<EventList[]>([]);
   const [selectedEvent, setSelectedEvent] = useState("");
-  const [recipientIdInput, setRecipientIdInput] = useState("");
+  const [recipientID, setRecipientIdInput] = useState("");
   const [recipientData, setRecipientData] = useState<Recipient>({
     id: "",
     name: "",
     bloodType: "",
   });
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [cost, setCost] = useState("");
+  const [deliveryCost, setCost] = useState(0);
 
-  const recipients: Recipient[] = [
-    { id: "1112223334", name: "John Doe", bloodType: "A+" },
-    { id: "2223334445", name: "Jane Smith", bloodType: "O-" },
-    { id: "5775775588", name: "John Doe", bloodType: "A+" },
-    { id: "3892974858", name: "Jane Smith", bloodType: "O-" },
-    { id: "7900482028", name: "John Doe", bloodType: "A+" },
-    { id: "8494004284", name: "Jane Smith", bloodType: "O-" },
-    // ... more recipients
-  ];
+  
 
   // Filter recipients based on the input
-  const filteredRecipients = recipients.filter((r) =>
-    r.id.includes(recipientIdInput)
-  );
+
 
   const handleEventChange = (event: {
     target: { value: React.SetStateAction<string> };
   }) => {
+    console.log(event.target.value)
     setSelectedEvent(event.target.value);
   };
 
@@ -71,21 +80,51 @@ export default function ProcessRequest() {
     setShowSuggestions(false);
   };
 
-  const handleCostChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
-    setCost(event.target.value);
-  };
+ 
 
-  const handleSubmit = (event: { preventDefault: () => void }) => {
+  const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     // Handle the form submission
-    console.log({
-      selectedEvent,
-      recipientData,
-      cost,
-    });
+    const {error} = await supabase
+    .from('Donation')
+    .insert({
+      deliveryCost,
+      adminId: "70d7059d-3581-451a-811a-002236cb91bf", // TO BE Done
+      recipientID,
+      eventId: selectedEvent,
+    })
+
+    if (error) {console.log(error)}
   };
+
+  const fetchEvents = async () => {
+    const { data, error } = await supabase.from("DonationEvent").select();
+  
+    if (error) {
+      console.error(error);
+      setError('Failed to fetch events'); // Set error message
+      return [];
+    }
+    
+    if (data) {
+      // Directly assign the data to DonationEvents as it's already in the correct format
+      const Events: EventList[] = data.map(e => ({id: e.eventId, name: e.title}));
+      return Events;
+    }
+  
+    return [];
+  };
+  
+  useEffect(() => {
+    fetchEvents().then(events => {
+      setEvents(events.map(e => ({id:e.id, name: e.name})));
+    }).catch(err => {
+      console.error('Error while fetching events:', err);
+      setError('An error occurred while fetching events');
+    });
+  }, []);
+  
+
 
   return (
     <div className="bg-[#f7f7f7] pt-16 flex flex-col items-center justify-center min-h-screen font-roboto">
@@ -120,24 +159,12 @@ export default function ProcessRequest() {
               </label>
               <input
                 type="text"
-                value={recipientIdInput}
+                value={recipientID}
                 onChange={handleRecipientIdChange}
                 className="w-full px-3 py-2 leading-tight text-gray-700 bg-gray-200 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 placeholder="Enter ID"
               />
-              {showSuggestions && (
-                <ul className="absolute z-10 w-full overflow-auto bg-white shadow-md max-h-60">
-                  {filteredRecipients.map((recipient) => (
-                    <li
-                      key={recipient.id}
-                      onClick={() => handleSelectRecipient(recipient)}
-                      className="p-2 cursor-pointer hover:bg-gray-100"
-                    >
-                      {recipient.id}
-                    </li>
-                  ))}
-                </ul>
-              )}
+              
             </div>
 
             <div className="mb-4">
@@ -171,9 +198,9 @@ export default function ProcessRequest() {
                 Cost
               </label>
               <input
-                type="text"
-                value={cost}
-                onChange={handleCostChange}
+                type="number"
+                value={deliveryCost}
+                onChange={e => setCost(e.target.valueAsNumber)}
                 className="w-full px-3 py-2 leading-tight text-gray-700 bg-gray-200 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 placeholder="Enter cost"
                 required
