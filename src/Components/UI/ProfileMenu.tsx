@@ -9,12 +9,21 @@ import {
   Avatar,
   Typography,
 } from "@material-tailwind/react";
+import { supabase } from "../../utils/supabase";
 
 interface ProfileMenuProps {
   toggled: boolean;
 }
 
 const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
+
+  const SignOut =async () => {
+    console.log("signOut Clicked")
+    const { error } = await supabase.auth.signOut()
+    if (error){console.log(error)}
+  }
+
+
   return (
     <div
       className={`lg:block ${
@@ -143,6 +152,8 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
               variant="small"
               className="font-medium"
               placeholder={undefined}
+              onClick={SignOut}
+              
             >
               Sign Out
             </Typography>

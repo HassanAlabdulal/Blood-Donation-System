@@ -1,8 +1,36 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect } from "react";
+import { supabase } from "../utils/supabase";
+
+
 
 export default function SignIn() {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+
+  const handleSubmit = async (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    try{
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password
+    })
+
+    if (error){throw error}
+
+    const user = data.user
+    
+
+  }
+  catch{
+    console.error("Error during sign in");
+  }
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen px-5 py-5 bg-[#f7f7f7] min-w-screen font-roboto">
       <div className="w-2/3 overflow-hidden text-gray-500 bg-gray-100 shadow-xl rounded-3xl">
@@ -219,7 +247,7 @@ export default function SignIn() {
               </h1>
               <p>Enter your information to sign in</p>
             </div>
-            <form method="post">
+            <form method="post" onSubmit={handleSubmit} >
               <div className="flex mt-20 -mx-3">
                 <div className="w-full px-3 mb-5">
                   <label className="px-1 text-xs font-semibold">Email</label>
@@ -233,6 +261,8 @@ export default function SignIn() {
                       type="email"
                       className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#292828]"
                       placeholder="donorhub@example.com"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
                     />
                   </div>
                 </div>
@@ -250,6 +280,8 @@ export default function SignIn() {
                       type="password"
                       className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#292828]"
                       placeholder="************"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
                     />
                   </div>
                 </div>
