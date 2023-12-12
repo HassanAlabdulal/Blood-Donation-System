@@ -1,50 +1,92 @@
 import React, { useState, useEffect } from "react";
+import { supabase } from "../utils/supabase";
+import { User } from "@supabase/supabase-js";
+
+type userProfile = {
+  userId: string,
+  name: string,
+  email: string,
+  phoneNumber: string,
+  bloodType: string,
+  dateOfBirth: string,
+  age: number,
+  weight: number,
+  address: string,
+  medicalHistory: string,
+};
 
 export default function EditProfileUser() {
   // Provided user profile data
-  const userProfile = {
-    userId: "1112223334",
-    name: "Abdullah Mohammed",
-    email: "Abdullah2@gmail.com",
-    phoneNumber: "557592000",
-    bloodType: "A+",
-    dateOfBirth: "1990-01-01",
-    age: "33",
-    weight: "70",
-    address: "123 Main Street",
-    medicalHistory: "None",
-    otherMedicalHistory: "",
-  };
+  const [user, setUser] = useState<User | null>(null)
+  const [userProfile, setUserProfile] = useState<userProfile >(
+    {
+      userId: "1111111111111",
+      name: "Abdullah",
+      email: "Abdullah2@gmail.com",
+      phoneNumber: "557592000",
+      bloodType: "A+",
+      dateOfBirth: "1990-01-01",
+      age: 33,
+      weight: 70,
+      address: "123 Main Street",
+      medicalHistory: "None",
+    }
+  )
+
+  // Example user profile data
+  useEffect(() => {
+    getUser()
+  })
+
+  const getUser =async () => {
+    const {data, error} = await supabase.auth.getUser()
+    if(error){console.log("Signed Out")}
+    
+    if (data) {
+      setUser(data.user)
+      await getProfile()
+
+    }
+    
+  }
+
+  const getProfile = async () => {
+    const { data, error } = await supabase
+    .from('profiles')
+    .select()
+    .eq('id', user?.id)
+
+
+    if (data){
+      setUserProfile({
+        userId: data[0].id,
+        name: data[0].full_name,
+        email: data[0].username,
+        phoneNumber: data[0].phone,
+        bloodType: data[0].bloodType,
+        dateOfBirth: data[0].DoB,
+        age: 33,
+        weight: data[0].weight,
+        address: data[0].country +" - "+ data[0].city +" - "+ data[0].street +" - "+ data[0].postalCode,
+        medicalHistory: "data[0].",
+      })
+      setPhoneNumber(userProfile.phoneNumber)
+      setWeight(userProfile.weight)
+      setAddress(userProfile.address)
+
+    }
+  }
 
   // State variables for editable fields
-  const [phoneNumber, setPhoneNumber] = useState(userProfile.phoneNumber);
-  const [weight, setWeight] = useState(userProfile.weight);
-  const [address, setAddress] = useState(userProfile.address);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [weight, setWeight] = useState(0);
+  const [address, setAddress] = useState("");
   const [medicalHistory, setMedicalHistory] = useState(
     userProfile.medicalHistory
   );
-  const [otherMedicalHistory, setOtherMedicalHistory] = useState(
-    userProfile.otherMedicalHistory
-  );
+ 
 
-  const handleNumericInputChange =
-    (
-      setterFunction: {
-        (value: React.SetStateAction<string>): void;
-        (value: React.SetStateAction<string>): void;
-        (arg0: any): void;
-      },
-      maxLength: number
-    ) =>
-    (event: { target: { value: any } }) => {
-      const value = event.target.value;
-      if (
-        (value === "" || /^[0-9\b]+$/.test(value)) &&
-        value.length <= maxLength
-      ) {
-        setterFunction(value);
-      }
-    };
+  
 
   const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
   const diseasesPreventingDonation = [
@@ -121,11 +163,11 @@ export default function EditProfileUser() {
                   Phone Number
                 </label>
                 <input
-                  type="tel"
+                  type="text"
                   className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-200 border-2 border-black rounded-md"
                   id="phone-number"
                   value={phoneNumber}
-                  onChange={handleNumericInputChange(setPhoneNumber, 10)}
+                  onChange={e => setPhoneNumber(e.target.value)}
                 />
               </div>
             </div>
@@ -162,9 +204,9 @@ export default function EditProfileUser() {
                 <input
                   className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-200 border-2 border-black rounded-md"
                   id="weight"
-                  type="text"
+                  type="number"
                   value={weight}
-                  onChange={handleNumericInputChange(setWeight, 3)}
+                  onChange={e => setWeight(e.target.valueAsNumber)}
                 />
               </div>
             </div>
@@ -238,16 +280,7 @@ export default function EditProfileUser() {
                   </option>
                 ))}
               </select>
-              {medicalHistory === "Other" && (
-                <textarea
-                  className="block w-full px-3 py-2 mt-4 text-gray-700 bg-gray-200 rounded-md resize-none"
-                  id="other-medical-history"
-                  rows={3}
-                  value={otherMedicalHistory}
-                  onChange={(e) => setOtherMedicalHistory(e.target.value)}
-                  placeholder="Please specify your medical condition"
-                />
-              )}
+             
             </div>
 
             {/* Button Container */}

@@ -65,14 +65,14 @@ export default function Notification() {
   const [notifications, setNotifications] = useState<NotificationType[]>([
     {
       id: 1,
-      type: "Request for Recipient",
+      type: "Request for Donate",
       from: "Hassan Alabdulal",
       date: "24/05/2023",
       isCompleted: false,
     },
     {
       id: 2,
-      type: "Request for Donate",
+      type: "Request for Recipient",
       from: "Abdullah Al Matawah",
       date: "26/05/2023",
       isCompleted: false,

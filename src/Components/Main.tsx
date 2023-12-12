@@ -34,7 +34,7 @@ export default function Main() {
 
   const [donationEvents, setDonationEvents] = useState<DonationEvent[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [uesr, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User | null>(null)
 
   const fetchEvents = async () => {
     const { data, error } = await supabase.from("DonationEvent").select();
@@ -82,7 +82,7 @@ export default function Main() {
 
 
   function hand(): void {
-    console.log(uesr)
+    console.log(user)
   }
 
   return (

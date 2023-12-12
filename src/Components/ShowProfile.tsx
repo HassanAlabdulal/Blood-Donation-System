@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OperationsHistory from "./UI/OperationsHistory";
+import { supabase } from "../utils/supabase";
+import { User } from "@supabase/supabase-js";
 
 // const sampleDataFromBackend = [
 //   { type: "Donate", toFrom: "Ali Alabdulal", date: "22/11/2023" },
@@ -7,34 +9,80 @@ import OperationsHistory from "./UI/OperationsHistory";
 //   { type: "Recipient", toFrom: "Abdullah Al Matawah", date: "17/12/2020" },
 // ];
 
-export default function ShowProfile() {
-  // Example user profile data
-  const userProfile = {
-    userId: "1112223334",
-    name: "Abdullah Mohammed",
-    email: "Abdullah2@gmail.com",
-    phoneNumber: "557592000",
-    bloodType: "A+",
-    dateOfBirth: "1990-01-01",
-    age: "33",
-    weight: "70",
-    address: "123 Main Street",
-    medicalHistory: "None",
-    otherMedicalHistory: "",
-  };
+type userProfile = {
+  userId: string,
+  name: string,
+  email: string,
+  phoneNumber: string,
+  bloodType: string,
+  dateOfBirth: string,
+  age: number,
+  weight: number,
+  address: string,
+  medicalHistory: string,
+};
 
-  // Initialize state with the example user profile data
-  const [userId] = useState(userProfile.userId);
-  const [name] = useState(userProfile.name);
-  const [email] = useState(userProfile.email);
-  const [phoneNumber] = useState(userProfile.phoneNumber);
-  const [bloodType] = useState(userProfile.bloodType);
-  const [dateOfBirth] = useState(userProfile.dateOfBirth);
-  const [age] = useState(userProfile.age);
-  const [weight] = useState(userProfile.weight);
-  const [address] = useState(userProfile.address);
-  const [medicalHistory] = useState(userProfile.medicalHistory);
-  const [otherMedicalHistory] = useState(userProfile.otherMedicalHistory);
+export default function ShowProfile() {
+  const [user, setUser] = useState<User | null>(null)
+  const [userProfile, setUserProfile] = useState<userProfile >(
+    {
+      userId: "1111111111111",
+      name: "Abdullah",
+      email: "Abdullah2@gmail.com",
+      phoneNumber: "557592000",
+      bloodType: "A+",
+      dateOfBirth: "1990-01-01",
+      age: 33,
+      weight: 70,
+      address: "123 Main Street",
+      medicalHistory: "None",
+    }
+  )
+
+  // Example user profile data
+  useEffect(() => {
+    getUser()
+  })
+
+  const getUser =async () => {
+    const {data, error} = await supabase.auth.getUser()
+    if(error){console.log("Signed Out")}
+    
+    if (data) {
+      setUser(data.user)
+      await getProfile()
+
+    }
+    
+  }
+
+  const getProfile = async () => {
+    const { data, error } = await supabase
+    .from('profiles')
+    .select()
+    .eq('id', user?.id)
+
+
+    if (data){
+      setUserProfile({
+        userId: data[0].id,
+        name: data[0].full_name,
+        email: data[0].username,
+        phoneNumber: data[0].phone,
+        bloodType: data[0].bloodType,
+        dateOfBirth: data[0].DoB,
+        age: 33,
+        weight: data[0].weight,
+        address: data[0].country +" - "+ data[0].city +" - "+ data[0].street +" - "+ data[0].postalCode,
+        medicalHistory: "data[0].",
+      })
+    }
+  }
+
+  
+ 
+
+ 
 
   return (
     <div className="bg-[#f7f7f7] pt-16 flex flex-col items-center min-h-screen font-roboto">
@@ -51,7 +99,7 @@ export default function ShowProfile() {
                 User ID
               </label>
               <div className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-100 rounded-md">
-                {userId}
+                {userProfile.userId}
               </div>
             </div>
 
@@ -61,7 +109,7 @@ export default function ShowProfile() {
                 Name
               </label>
               <div className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-100 rounded-md">
-                {name}
+                {userProfile.name}
               </div>
             </div>
 
@@ -72,7 +120,7 @@ export default function ShowProfile() {
                   Email
                 </label>
                 <div className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-100 rounded-md">
-                  {email}
+                  {userProfile.email}
                 </div>
               </div>
               <div className="flex-1">
@@ -84,7 +132,7 @@ export default function ShowProfile() {
                     +966
                   </span>
                   <div className="flex-1 block w-full px-3 py-2 text-gray-700 bg-gray-100 rounded-none rounded-r-md">
-                    {phoneNumber}
+                    {userProfile.phoneNumber}
                   </div>
                 </div>
               </div>
@@ -97,7 +145,7 @@ export default function ShowProfile() {
                   Blood Type
                 </label>
                 <div className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-100 rounded-md">
-                  {bloodType}
+                  {userProfile.bloodType}
                 </div>
               </div>
               <div className="flex-1">
@@ -105,7 +153,7 @@ export default function ShowProfile() {
                   Weight (kg)
                 </label>
                 <div className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-100 rounded-md">
-                  {weight}
+                  {userProfile.weight}
                 </div>
               </div>
             </div>
@@ -117,7 +165,7 @@ export default function ShowProfile() {
                   Date of Birth
                 </label>
                 <div className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-100 rounded-md">
-                  {dateOfBirth}
+                  {userProfile.dateOfBirth}
                 </div>
               </div>
               <div className="flex-1">
@@ -125,7 +173,7 @@ export default function ShowProfile() {
                   Age
                 </label>
                 <div className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-100 rounded-md">
-                  {age}
+                  {userProfile.age}
                 </div>
               </div>
             </div>
@@ -136,7 +184,7 @@ export default function ShowProfile() {
                 Address
               </label>
               <div className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-100 rounded-md">
-                {address}
+                {userProfile.address}
               </div>
             </div>
 
@@ -146,11 +194,11 @@ export default function ShowProfile() {
                 Medical History
               </label>
               <div className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-100 rounded-md">
-                {medicalHistory}
+                {userProfile.medicalHistory}
               </div>
-              {medicalHistory === "Other" && (
+              {userProfile.medicalHistory === "Other" && (
                 <div className="block w-full px-3 py-2 mt-4 text-gray-700 bg-gray-100 rounded-md">
-                  {otherMedicalHistory}
+                  {}
                 </div>
               )}
             </div>

@@ -258,7 +258,7 @@ export default function SignIn() {
                       </i>
                     </div>
                     <input
-                      type="email"
+                      type="text"
                       className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#292828]"
                       placeholder="donorhub@example.com"
                       value={email}
