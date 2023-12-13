@@ -24,18 +24,19 @@ type userProfile = {
 
 export default function ShowProfile() {
   const [user, setUser] = useState<User | null>(null)
+  const [ diseases , setDiseases] = useState("")
   const [userProfile, setUserProfile] = useState<userProfile >(
     {
-      userId: "1111111111111",
-      name: "Abdullah",
-      email: "Abdullah2@gmail.com",
-      phoneNumber: "557592000",
-      bloodType: "A+",
-      dateOfBirth: "1990-01-01",
-      age: 33,
-      weight: 70,
-      address: "123 Main Street",
-      medicalHistory: "None",
+      userId: "LOADING...",
+      name: "LOADING...",
+      email: "LOADING...",
+      phoneNumber: "LOADING...",
+      bloodType: "LOADING...",
+      dateOfBirth: "LOADING...",
+      age: 0,
+      weight: 0,
+      address: "LOADING...",
+      medicalHistory: "LOADING...",
     }
   )
 
@@ -50,6 +51,7 @@ export default function ShowProfile() {
     
     if (data) {
       setUser(data.user)
+      await getMedicalHistory()
       await getProfile()
 
     }
@@ -74,9 +76,30 @@ export default function ShowProfile() {
         age: 33,
         weight: data[0].weight,
         address: data[0].country +" - "+ data[0].city +" - "+ data[0].street +" - "+ data[0].postalCode,
-        medicalHistory: "data[0].",
+        medicalHistory:diseases,
       })
     }
+  }
+
+  const getMedicalHistory = async () => {
+    const { data, error } = await supabase
+    .from('MedicalHistory')
+    .select()
+    .eq('patientID', user?.id)
+
+    if(data) {getDiseases()}
+    else {setDiseases("Nothing")}
+  }
+  const getDiseases =async () => {
+    const { data, error } = await supabase
+    .from('Diseases')
+    .select()
+    .eq('medicalPID', user?.id)
+
+    if(data) {
+      setDiseases(data.map(d => d.Disease).toString())
+    }
+    else {setDiseases("Nothing")}
   }
 
   

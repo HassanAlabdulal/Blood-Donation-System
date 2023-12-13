@@ -148,7 +148,6 @@ const SignUp = () => {
     try{
       const { data, error } = await supabase.auth.signUp({ email, password });
       if (error) {
-        console.log(error)
         throw error
       }
 

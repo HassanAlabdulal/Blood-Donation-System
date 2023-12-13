@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -7,24 +7,68 @@ import {
   faHistory,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
+import { supabase } from "../utils/supabase";
+
+
+type initialUsers = {
+  id: string;
+  name: string;
+}
 
 export default function UsersEdit() {
-  const initialUsers = [
-    { id: "1234567890", name: "Aaron Smith" },
-    { id: "2345678901", name: "Brenda Johnson" },
-    { id: "3456789012", name: "Charles Brown" },
-    { id: "4567890123", name: "Diana Williams" },
-    { id: "5678901234", name: "Edward Jones" },
-    { id: "6789012345", name: "Fiona White" },
-    { id: "7890123456", name: "George Harris" },
-    { id: "8901234567", name: "Hannah Martin" },
-    { id: "9012345678", name: "Isaac Clark" },
-    { id: "0123456789", name: "Jennifer Lewis" },
-    { id: "9012345678", name: "Hassan Alabdulal" },
-    { id: "0123456789", name: "Abdullah Al Matawah" },
-  ].sort((a, b) => a.name.localeCompare(b.name));
 
-  const [users, setUsers] = useState(initialUsers);
+  const [adminsIds, setAdminsIds] = useState<string[]>([])
+  const [initialUsers, setUserProfile] = useState<initialUsers[]>([
+    {
+      id: "LOADING...",
+      name: "LOADING...",
+    }
+  ])
+
+  useEffect(() => {
+     getAdminsIds()
+     getUserProfile()
+  })
+
+  const getAdminsIds =async () => {
+    const {data, error }= await supabase
+    .from('Admin')
+    .select('adminId')
+
+    if (data){
+      setAdminsIds(data.map(e => (e.adminId)))
+    }
+  }
+
+  const getUserProfile =async () => {
+    const { data, error } = await supabase
+    .from('profiles')
+    .select()
+    
+    if(data){
+      setUserProfile(data.map(e => (
+        {
+          id: e.id,
+          name: e.full_name,
+        }
+      )))
+    }
+  }
+  // const initialUsers = [
+  //   { id: "1234567890", name: "Aaron Smith" },
+  //   { id: "2345678901", name: "Brenda Johnson" },
+  //   { id: "3456789012", name: "Charles Brown" },
+  //   { id: "4567890123", name: "Diana Williams" },
+  //   { id: "5678901234", name: "Edward Jones" },
+  //   { id: "6789012345", name: "Fiona White" },
+  //   { id: "7890123456", name: "George Harris" },
+  //   { id: "8901234567", name: "Hannah Martin" },
+  //   { id: "9012345678", name: "Isaac Clark" },
+  //   { id: "0123456789", name: "Jennifer Lewis" },
+  //   { id: "9012345678", name: "Hassan Alabdulal" },
+  //   { id: "0123456789", name: "Abdullah Al Matawah" },
+  // ].sort((a, b) => a.name.localeCompare(b.name));
+
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearchChange = (event: {
@@ -33,11 +77,15 @@ export default function UsersEdit() {
     setSearchTerm(event.target.value);
   };
 
-  const handleRemoveUser = (userId: string) => {
-    setUsers(users.filter((user) => user.id !== userId));
+  const handleRemoveUser = async (userId: string) => {
+    // setUserProfile(initialUsers.filter((user) => user.id !== userId));
+    const { error } = await supabase
+      .from('profiles')
+      .delete()
+      .eq('id', userId)
   };
 
-  const filteredUsers = users.filter(
+  const filteredUsers = initialUsers.filter(
     (user) =>
       user.id.includes(searchTerm) ||
       user.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -104,7 +152,10 @@ export default function UsersEdit() {
                     {user.name}
                   </td>
                   <td className="px-5 py-3 border-b border-gray-300">
-                    <div className="flex justify-center space-x-2">
+                    {adminsIds.includes(user.id) && (<td className="flex justify-center text-center ">
+                      ADMIN
+                      </td>)}
+                    {!adminsIds.includes(user.id)&&(<div className="flex justify-center space-x-2">
                       {/* History Anchor */}
                       <Link
                         to="/OperationsHistoryAdmin"
@@ -130,7 +181,7 @@ export default function UsersEdit() {
                       >
                         <FontAwesomeIcon icon={faTrash} />
                       </button>
-                    </div>
+                    </div>)}
                   </td>
                 </tr>
               ))}
