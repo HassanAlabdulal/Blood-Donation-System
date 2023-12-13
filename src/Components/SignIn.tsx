@@ -4,32 +4,27 @@ import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import React, { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase";
 
-
-
 export default function SignIn() {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    try{
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password
-    })
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
 
-    if (error){throw error}
+      if (error) {
+        throw error;
+      }
 
-    const user = data.user
-    
-
-  }
-  catch{
-    console.error("Error during sign in");
-  }
-  }
+      const user = data.user;
+    } catch {
+      console.error("Error during sign in");
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen px-5 py-5 bg-[#f7f7f7] min-w-screen font-roboto">
@@ -247,7 +242,7 @@ export default function SignIn() {
               </h1>
               <p>Enter your information to sign in</p>
             </div>
-            <form method="post" onSubmit={handleSubmit} >
+            <form method="post" onSubmit={handleSubmit}>
               <div className="flex mt-20 -mx-3">
                 <div className="w-full px-3 mb-5">
                   <label className="px-1 text-xs font-semibold">Email</label>
@@ -262,7 +257,7 @@ export default function SignIn() {
                       className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#292828]"
                       placeholder="donorhub@example.com"
                       value={email}
-                      onChange={e => setEmail(e.target.value)}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
                 </div>
@@ -281,7 +276,7 @@ export default function SignIn() {
                       className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#292828]"
                       placeholder="************"
                       value={password}
-                      onChange={e => setPassword(e.target.value)}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                 </div>
@@ -298,13 +293,14 @@ export default function SignIn() {
 
               <div className="flex flex-col -mx-3">
                 <div className="w-full px-3 mb-5">
-                  <button
+                  <Link
+                    to="/Main"
                     className="block w-full max-w-xs px-3 py-3 mx-auto font-semibold text-lg text-white rounded-lg uppercase bg-[#292828] border-2 border-[#292828] font-roboto
          roundedtransition-all duration-700 hover:bg-black focus:outline-none shadow-md hover:shadow-xl
          disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none cursor-pointer"
                   >
                     Sign in
-                  </button>
+                  </Link>
                 </div>
                 <div className="w-full px-3">
                   <p className="w-full max-w-xs px-3 mx-auto text-center text-[#121212]">

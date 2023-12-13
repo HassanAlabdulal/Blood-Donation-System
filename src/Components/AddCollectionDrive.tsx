@@ -1,6 +1,7 @@
 import { Textarea } from "@material-tailwind/react";
 import React, { useState } from "react";
-import {supabase} from '../utils/supabase'
+import { supabase } from "../utils/supabase";
+import { Link } from "react-router-dom";
 
 export default function AddCollectionDrive() {
   const [title, setTitle] = useState("");
@@ -32,19 +33,19 @@ export default function AddCollectionDrive() {
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    const {error} = await supabase
-    .from('DonationEvent')
-    .insert({
+    const { error } = await supabase.from("DonationEvent").insert({
       startDate,
       endDate,
       location,
       title,
       description,
       adminId: "70d7059d-3581-451a-811a-002236cb91bf", // TO BE Done
-      category
-    })
+      category,
+    });
 
-    if (error){console.log(error)}
+    if (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -171,14 +172,14 @@ export default function AddCollectionDrive() {
           </div>
 
           <div className="flex items-center justify-center mt-8">
-            <button
-              type="submit"
+            <Link
+              to="/Main"
               className=" cursor-pointer rounded-lg bg-[#292828] border-2 border-[#292828] px-9 py-2.5
             text-base font-bold text-white align-middle transition-all duration-700 hover:bg-black focus:outline-none shadow-md hover:shadow-xl
               disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
             >
               Submit
-            </button>
+            </Link>
           </div>
         </form>
       </div>

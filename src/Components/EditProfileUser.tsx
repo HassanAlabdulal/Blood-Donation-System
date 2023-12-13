@@ -1,63 +1,61 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase";
 import { User } from "@supabase/supabase-js";
+import { Link } from "react-router-dom";
 
 type userProfile = {
-  userId: string,
-  name: string,
-  email: string,
-  phoneNumber: string,
-  bloodType: string,
-  dateOfBirth: string,
-  age: number,
-  weight: number,
-  address: string,
-  medicalHistory: string,
+  userId: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  bloodType: string;
+  dateOfBirth: string;
+  age: number;
+  weight: number;
+  address: string;
+  medicalHistory: string;
 };
 
 export default function EditProfileUser() {
   // Provided user profile data
-  const [user, setUser] = useState<User | null>(null)
-  const [userProfile, setUserProfile] = useState<userProfile >(
-    {
-      userId: "1111111111111",
-      name: "Abdullah",
-      email: "Abdullah2@gmail.com",
-      phoneNumber: "557592000",
-      bloodType: "A+",
-      dateOfBirth: "1990-01-01",
-      age: 33,
-      weight: 70,
-      address: "123 Main Street",
-      medicalHistory: "None",
-    }
-  )
+  const [user, setUser] = useState<User | null>(null);
+  const [userProfile, setUserProfile] = useState<userProfile>({
+    userId: "1111111111111",
+    name: "Abdullah",
+    email: "Abdullah2@gmail.com",
+    phoneNumber: "557592000",
+    bloodType: "A+",
+    dateOfBirth: "1990-01-01",
+    age: 33,
+    weight: 70,
+    address: "123 Main Street",
+    medicalHistory: "None",
+  });
 
   // Example user profile data
   useEffect(() => {
-    getUser()
-  })
+    getUser();
+  });
 
-  const getUser =async () => {
-    const {data, error} = await supabase.auth.getUser()
-    if(error){console.log("Signed Out")}
-    
-    if (data) {
-      setUser(data.user)
-      await getProfile()
-
+  const getUser = async () => {
+    const { data, error } = await supabase.auth.getUser();
+    if (error) {
+      console.log("Signed Out");
     }
-    
-  }
+
+    if (data) {
+      setUser(data.user);
+      await getProfile();
+    }
+  };
 
   const getProfile = async () => {
     const { data, error } = await supabase
-    .from('profiles')
-    .select()
-    .eq('id', user?.id)
+      .from("profiles")
+      .select()
+      .eq("id", user?.id);
 
-
-    if (data){
+    if (data) {
       setUserProfile({
         userId: data[0].id,
         name: data[0].full_name,
@@ -67,15 +65,21 @@ export default function EditProfileUser() {
         dateOfBirth: data[0].DoB,
         age: 33,
         weight: data[0].weight,
-        address: data[0].country +" - "+ data[0].city +" - "+ data[0].street +" - "+ data[0].postalCode,
+        address:
+          data[0].country +
+          " - " +
+          data[0].city +
+          " - " +
+          data[0].street +
+          " - " +
+          data[0].postalCode,
         medicalHistory: "data[0].",
-      })
-      setPhoneNumber(userProfile.phoneNumber)
-      setWeight(userProfile.weight)
-      setAddress(userProfile.address)
-
+      });
+      setPhoneNumber(userProfile.phoneNumber);
+      setWeight(userProfile.weight);
+      setAddress(userProfile.address);
     }
-  }
+  };
 
   // State variables for editable fields
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -84,9 +88,6 @@ export default function EditProfileUser() {
   const [medicalHistory, setMedicalHistory] = useState(
     userProfile.medicalHistory
   );
- 
-
-  
 
   const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
   const diseasesPreventingDonation = [
@@ -167,7 +168,7 @@ export default function EditProfileUser() {
                   className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-200 border-2 border-black rounded-md"
                   id="phone-number"
                   value={phoneNumber}
-                  onChange={e => setPhoneNumber(e.target.value)}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
                 />
               </div>
             </div>
@@ -206,7 +207,7 @@ export default function EditProfileUser() {
                   id="weight"
                   type="number"
                   value={weight}
-                  onChange={e => setWeight(e.target.valueAsNumber)}
+                  onChange={(e) => setWeight(e.target.valueAsNumber)}
                 />
               </div>
             </div>
@@ -280,7 +281,6 @@ export default function EditProfileUser() {
                   </option>
                 ))}
               </select>
-             
             </div>
 
             {/* Button Container */}
@@ -288,25 +288,23 @@ export default function EditProfileUser() {
               {" "}
               {/* Flex container with column direction */}
               {/* Change Password Button */}
-              <a
-                type="button"
+              <Link
+                to="/NewPassword"
                 className=" cursor-pointer rounded-lg bg-[#292828] border-2 border-[#292828] px-3 py-2
                 text-base font-bold text-white align-middle transition-all duration-700 hover:bg-black focus:outline-none shadow-md hover:shadow-xl
                   disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                href="NewPasswordPage"
               >
                 Change Password
-              </a>
+              </Link>
               {/* Update Profile Button */}
-              <a
-                type="submit"
+              <Link
+                to="/ShowProfile"
                 className="cursor-pointer rounded-lg bg-[#292828] border-2 border-[#292828] px-7 py-2
                 text-base font-bold text-white align-middle transition-all duration-700 hover:bg-black focus:outline-none shadow-md hover:shadow-xl
                   disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                href="ShowProfilePage"
               >
                 Save Changes
-              </a>
+              </Link>
             </div>
           </form>
         </div>
