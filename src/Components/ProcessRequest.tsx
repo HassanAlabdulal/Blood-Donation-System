@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {supabase} from "../utils/supabase"
+import { supabase } from "../utils/supabase";
+import { Link } from "react-router-dom";
 
 type Recipient = {
   id: string;
@@ -10,8 +11,7 @@ type Recipient = {
 type EventList = {
   id: string;
   name: string;
-}
-
+};
 
 type DonationEvent = {
   eventId: number;
@@ -24,10 +24,7 @@ type DonationEvent = {
   category: string;
 };
 export default function ProcessRequest() {
-
-
   const [error, setError] = useState<string | null>(null);
-
 
   const [events, setEvents] = useState<EventList[]>([]);
   const [selectedEvent, setSelectedEvent] = useState("");
@@ -40,15 +37,12 @@ export default function ProcessRequest() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [deliveryCost, setCost] = useState(0);
 
-  
-
   // Filter recipients based on the input
-
 
   const handleEventChange = (event: {
     target: { value: React.SetStateAction<string> };
   }) => {
-    console.log(event.target.value)
+    console.log(event.target.value);
     setSelectedEvent(event.target.value);
   };
 
@@ -59,18 +53,18 @@ export default function ProcessRequest() {
     setShowSuggestions(true);
 
     const { data, error } = await supabase
-    .from('profiles')
-    .select()
-    .eq('id', event.target.value)
+      .from("profiles")
+      .select()
+      .eq("id", event.target.value);
 
     // console.log(data.)
 
-    if (data){
+    if (data) {
       setRecipientData({
         bloodType: data[0].bloodType,
         name: data[0].full_name,
-        id: data[0].id
-      })
+        id: data[0].id,
+      });
     }
   };
 
@@ -80,51 +74,52 @@ export default function ProcessRequest() {
     setShowSuggestions(false);
   };
 
- 
-
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     // Handle the form submission
-    const {error} = await supabase
-    .from('Donation')
-    .insert({
+    const { error } = await supabase.from("Donation").insert({
       deliveryCost,
       adminId: "70d7059d-3581-451a-811a-002236cb91bf", // TO BE Done
       recipientID,
       eventId: selectedEvent,
-    })
+    });
 
-    if (error) {console.log(error)}
+    if (error) {
+      console.log(error);
+    }
   };
 
   const fetchEvents = async () => {
     const { data, error } = await supabase.from("DonationEvent").select();
-  
+
     if (error) {
       console.error(error);
-      setError('Failed to fetch events'); // Set error message
+      setError("Failed to fetch events"); // Set error message
       return [];
     }
-    
+
     if (data) {
       // Directly assign the data to DonationEvents as it's already in the correct format
-      const Events: EventList[] = data.map(e => ({id: e.eventId, name: e.title}));
+      const Events: EventList[] = data.map((e) => ({
+        id: e.eventId,
+        name: e.title,
+      }));
       return Events;
     }
-  
+
     return [];
   };
-  
-  useEffect(() => {
-    fetchEvents().then(events => {
-      setEvents(events.map(e => ({id:e.id, name: e.name})));
-    }).catch(err => {
-      console.error('Error while fetching events:', err);
-      setError('An error occurred while fetching events');
-    });
-  }, []);
-  
 
+  useEffect(() => {
+    fetchEvents()
+      .then((events) => {
+        setEvents(events.map((e) => ({ id: e.id, name: e.name })));
+      })
+      .catch((err) => {
+        console.error("Error while fetching events:", err);
+        setError("An error occurred while fetching events");
+      });
+  }, []);
 
   return (
     <div className="bg-[#f7f7f7] pt-16 flex flex-col items-center justify-center min-h-screen font-roboto">
@@ -164,7 +159,6 @@ export default function ProcessRequest() {
                 className="w-full px-3 py-2 leading-tight text-gray-700 bg-gray-200 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 placeholder="Enter ID"
               />
-              
             </div>
 
             <div className="mb-4">
@@ -200,7 +194,7 @@ export default function ProcessRequest() {
               <input
                 type="number"
                 value={deliveryCost}
-                onChange={e => setCost(e.target.valueAsNumber)}
+                onChange={(e) => setCost(e.target.valueAsNumber)}
                 className="w-full px-3 py-2 leading-tight text-gray-700 bg-gray-200 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 placeholder="Enter cost"
                 required
@@ -209,14 +203,14 @@ export default function ProcessRequest() {
           </div>
 
           <div className="flex items-center justify-center">
-            <button
-              type="submit"
+            <Link
+              to="/Main"
               className=" cursor-pointer rounded-lg bg-[#292828] border-2 border-[#292828] px-9 py-2.5
               text-base font-bold text-white align-middle transition-all duration-700 hover:bg-black focus:outline-none shadow-md hover:shadow-xl
                 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
             >
               Submit
-            </button>
+            </Link>
           </div>
         </form>
       </div>
