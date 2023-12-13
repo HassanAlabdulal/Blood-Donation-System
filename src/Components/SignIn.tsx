@@ -293,14 +293,13 @@ export default function SignIn() {
 
               <div className="flex flex-col -mx-3">
                 <div className="w-full px-3 mb-5">
-                  <Link
-                    to="/Main"
+                  <button
                     className="flex items-center justify-center w-full max-w-xs px-3 py-3 mx-auto font-semibold text-lg text-white rounded-lg uppercase bg-[#292828] border-2 border-[#292828] font-roboto
          roundedtransition-all duration-700 hover:bg-black focus:outline-none shadow-md hover:shadow-xl
          disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none cursor-pointer"
                   >
                     Sign in
-                  </Link>
+                  </button>
                 </div>
                 <div className="w-full px-3">
                   <p className="w-full max-w-xs px-3 mx-auto text-center text-[#121212]">

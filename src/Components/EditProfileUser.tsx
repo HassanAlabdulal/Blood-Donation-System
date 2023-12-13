@@ -299,14 +299,13 @@ export default function EditProfileUser() {
                 Change Password
               </Link>
               {/* Update Profile Button */}
-              <Link
-                to="/ShowProfile"
+              <button
                 className="cursor-pointer rounded-lg bg-[#292828] border-2 border-[#292828] px-7 py-2
                 text-base font-bold text-white align-middle transition-all duration-700 hover:bg-black focus:outline-none shadow-md hover:shadow-xl
                   disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               >
                 Save Changes
-              </Link>
+              </button>
             </div>
           </form>
         </div>

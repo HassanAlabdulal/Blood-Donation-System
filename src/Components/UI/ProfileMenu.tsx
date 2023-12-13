@@ -134,7 +134,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
             className="flex items-center gap-2 "
             placeholder={undefined}
           >
-            <Link to="/" className="flex items-center gap-2 text-left">
+            <button className="flex items-center gap-2 text-left">
               <svg
                 width="16"
                 height="14"
@@ -157,7 +157,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
               >
                 Sign Out
               </Typography>
-            </Link>
+            </button>
           </MenuItem>
         </MenuList>
       </Menu>
