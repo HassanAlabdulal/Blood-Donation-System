@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ProfileMenu from "./UI/ProfileMenu";
+import { User } from "@supabase/supabase-js";
+import { supabase } from "../utils/supabase";
 
 const navMotion = {
   visible: {
@@ -28,31 +30,63 @@ const itemMotionDesktop = {
 };
 
 const navLinks = [
-  { name: "Home", href: "/Main", id: 1 },
   { name: "Reports", href: "/Reports", id: 2 },
   { name: "Collection Drive", href: "/AddCollectionDrive", id: 3 },
   { name: "Donation Request", href: "/ProcessRequest", id: 4 },
   { name: "Users", href: "/UsersEdit", id: 5 },
 ];
 
-const NavLinks = ({
-  isMobile,
-  className,
-}: {
-  isMobile: boolean;
-  className: string;
-}) => (
-  <div className={className}>
-    {navLinks.map(({ name, href, id }) => (
-      <motion.div key={id} variants={isMobile ? itemMotion : itemMotionDesktop}>
-        <Link to={href}>{name}</Link>
-      </motion.div>
-    ))}
-  </div>
-);
+
 
 export default function Nav() {
   const [toggled, setToggled] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    getUser()
+    getIsAdmin()
+  })
+
+  const getUser =async () => {
+    const {data, error} = await supabase.auth.getUser()
+    if(error){console.log("Signed Out")}
+    
+    if (data) {
+      setUser(data.user)
+    } 
+  }
+
+  const getIsAdmin =async () => {
+    const {data, error }= await supabase
+    .from('Admin')
+    .select('adminId')
+
+    if (data){
+      setIsAdmin(data.map(e => (e.adminId)).includes(user?.id))
+    }  
+  }
+
+  const NavLinks = ({
+    isMobile,
+    className,
+  }: {
+    isMobile: boolean;
+    className: string;
+  }) => (
+    <div className={className}>
+      <motion.div key={1} variants={isMobile ? itemMotion : itemMotionDesktop}>
+          <Link to={"/Main"}>{"Home"}</Link>
+        </motion.div>
+      {isAdmin && (navLinks.map(({ name, href, id }) => (
+        <motion.div key={id} variants={isMobile ? itemMotion : itemMotionDesktop}>
+          <Link to={href}>{name}</Link>
+        </motion.div>
+      )))}
+    </div>
+  );
+
+
 
   return (
     <nav className="fixed top-0 left-0 z-[1000] bg-[#f7f7f7] flex items-center justify-between w-full px-16 pt-4 pb-4 font-medium max-md:px-8 md:ml-0 lg:ml-0">
@@ -120,15 +154,15 @@ export default function Nav() {
         >
           Sign up
         </Link>)}
-        <Link
+        {!user && (<Link
           to="/SignIn"
           className="middle none center rounded-lg border-2 border-[#121212] py-2 px-5 lg:py-1.5 lg:px-4 text-md font-bold font-nunito cursor-pointer mr-2 text-[#121212] transition-all hover:opacity-75 focus:ring focus:ring-[#292828] active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           data-ripple-dark="true"
         >
           Sign in
-        </Link>
+        </Link>)}
 
-        <ProfileMenu toggled={toggled} />
+        {user && (<ProfileMenu toggled={toggled} />)}
       </motion.div>
 
       {/* Hamburger Toggle */}

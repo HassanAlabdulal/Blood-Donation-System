@@ -54,21 +54,7 @@ export default function UsersEdit() {
       )))
     }
   }
-  // const initialUsers = [
-  //   { id: "1234567890", name: "Aaron Smith" },
-  //   { id: "2345678901", name: "Brenda Johnson" },
-  //   { id: "3456789012", name: "Charles Brown" },
-  //   { id: "4567890123", name: "Diana Williams" },
-  //   { id: "5678901234", name: "Edward Jones" },
-  //   { id: "6789012345", name: "Fiona White" },
-  //   { id: "7890123456", name: "George Harris" },
-  //   { id: "8901234567", name: "Hannah Martin" },
-  //   { id: "9012345678", name: "Isaac Clark" },
-  //   { id: "0123456789", name: "Jennifer Lewis" },
-  //   { id: "9012345678", name: "Hassan Alabdulal" },
-  //   { id: "0123456789", name: "Abdullah Al Matawah" },
-  // ].sort((a, b) => a.name.localeCompare(b.name));
-
+  
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearchChange = (event: {
@@ -167,7 +153,7 @@ export default function UsersEdit() {
 
                       {/* Edit Anchor */}
                       <Link
-                        to="/EditProfileAdmin"
+                        to={"/EditProfileAdmin/" + user.id}
                         className="inline-flex items-center px-4 py-2 font-bold text-white transition-all duration-700 bg-[#5f7fbf] rounded hover:bg-[#3e60a3]"
                       >
                         <FontAwesomeIcon icon={faEdit} className="mr-2" />

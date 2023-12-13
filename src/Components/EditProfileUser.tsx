@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase";
-import { User } from "@supabase/supabase-js";
-import { Link } from "react-router-dom";
+import { Link , useParams  } from "react-router-dom";
 
 type userProfile = {
   userId: string;
@@ -18,7 +17,8 @@ type userProfile = {
 
 export default function EditProfileUser() {
   // Provided user profile data
-  const [user, setUser] = useState<User | null>(null)
+  const params = useParams();
+  const [ diseases , setDiseases] = useState("")
   const [userProfile, setUserProfile] = useState<userProfile >(
     {
       userId: "LOADING...",
@@ -36,53 +36,54 @@ export default function EditProfileUser() {
 
   // Example user profile data
   useEffect(() => {
-    getUser();
+    getMedicalHistory();
+    getProfile();
   });
 
-  const getUser = async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (error) {
-      console.log("Signed Out");
-    }
-
-    if (data) {
-      setUser(data.user);
-      await getProfile();
-    }
-  };
+  
 
   const getProfile = async () => {
     const { data, error } = await supabase
       .from("profiles")
       .select()
-      .eq("id", user?.id);
+      .eq("id", params);
 
-    if (data) {
-      setUserProfile({
-        userId: data[0].id,
-        name: data[0].full_name,
-        email: data[0].username,
-        phoneNumber: data[0].phone,
-        bloodType: data[0].bloodType,
-        dateOfBirth: data[0].DoB,
-        age: 33,
-        weight: data[0].weight,
-        address:
-          data[0].country +
-          " - " +
-          data[0].city +
-          " - " +
-          data[0].street +
-          " - " +
-          data[0].postalCode,
-        medicalHistory: "data[0].",
-      });
-      setPhoneNumber(userProfile.phoneNumber);
-      setWeight(userProfile.weight);
-      setAddress(userProfile.address);
+      if (data){
+        setUserProfile({
+          userId: data[0].id,
+          name: data[0].full_name,
+          email: data[0].username,
+          phoneNumber: data[0].phone,
+          bloodType: data[0].bloodType,
+          dateOfBirth: data[0].DoB,
+          age: 33,
+          weight: data[0].weight,
+          address: data[0].country +" - "+ data[0].city +" - "+ data[0].street +" - "+ data[0].postalCode,
+          medicalHistory:diseases,
+        })
+      }
     }
-  };
 
+    const getMedicalHistory = async () => {
+      const { data, error } = await supabase
+      .from('MedicalHistory')
+      .select()
+      .eq('patientID', params)
+  
+      if(data) {getDiseases()}
+      else {setDiseases("Nothing")}
+    }
+    const getDiseases =async () => {
+      const { data, error } = await supabase
+      .from('Diseases')
+      .select()
+      .eq('medicalPID', params)
+  
+      if(data) {
+        setDiseases(data.map(d => d.Disease).toString())
+      }
+      else {setDiseases("Nothing")}
+    }
   // State variables for editable fields
   const [phoneNumber, setPhoneNumber] = useState("");
   const [weight, setWeight] = useState(0);

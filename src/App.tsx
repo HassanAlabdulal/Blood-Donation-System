@@ -61,7 +61,7 @@ function App() {
             path="/CollectionDriveReport"
             element={<CollectionDriveReport />}
           />
-          <Route path="/EditProfileAdmin" element={<EditProfileAdmin />} />
+          <Route path="/EditProfileAdmin/:id" element={<EditProfileAdmin />} />
           <Route path="/EditProfileUser" element={<EditProfileUser />} />
         </Routes>
       </Layout>

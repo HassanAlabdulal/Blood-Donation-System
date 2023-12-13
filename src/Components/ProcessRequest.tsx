@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type Recipient = {
   id: string;
@@ -25,6 +25,8 @@ type DonationEvent = {
 };
 export default function ProcessRequest() {
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
 
   const [events, setEvents] = useState<EventList[]>([]);
   const [selectedEvent, setSelectedEvent] = useState("");
@@ -87,6 +89,8 @@ export default function ProcessRequest() {
     if (error) {
       console.log(error);
     }
+
+    navigate("/Main");
   };
 
   const fetchEvents = async () => {

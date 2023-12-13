@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faDollarSign } from "@fortawesome/free-solid-svg-icons";
 import notificationImage from "../Assets/notification.gif";
 import { Link } from "react-router-dom";
+import { supabase } from "../utils/supabase";
+import { User } from "@supabase/supabase-js";
 
 interface NotificationType {
   id: number;
@@ -62,6 +64,12 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   );
 };
 export default function Notification() {
+
+  const [isRecipient, setIsRecipient] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
+
+  
+  
   const [notifications, setNotifications] = useState<NotificationType[]>([
     {
       id: 1,
@@ -78,6 +86,39 @@ export default function Notification() {
       isCompleted: false,
     },
   ]);
+
+  useEffect(() => {
+    getIsRecipient()
+    getUser()
+    getNotifications()
+    // console.log(recipientIds)
+    // console.log(donorsIds)
+    
+ })
+
+
+  const getIsRecipient =async () => {
+    const {data, error }= await supabase
+    .from('Recipient')
+    .select()
+
+    if (data){
+      setIsRecipient(data.includes(user?.id))
+    }
+  }
+
+  const getNotifications = async () => {
+      if (isRecipient){}
+      else{}
+  }
+
+
+  const getUser =async () => {
+    const {data, error} = await supabase.auth.getUser()
+    if(error){console.log("Signed Out")}
+    setUser(data.user)
+  }
+
 
   const handleAccept = (notification: { id: number }) => {
     setNotifications((currentNotifications) =>
@@ -115,7 +156,7 @@ export default function Notification() {
           <thead>
             <tr className="border-b">
               <th className="px-5 py-3 text-center">Type</th>
-              <th className="px-5 py-3 text-center">From</th>
+              <th className="px-5 py-3 text-center">From / For</th>
               <th className="px-5 py-3 text-center">Date</th>
               <th className="px-5 py-3 text-center">Action</th>
             </tr>

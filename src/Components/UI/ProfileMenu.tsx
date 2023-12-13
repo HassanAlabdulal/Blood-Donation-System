@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   Menu,
@@ -16,12 +16,16 @@ interface ProfileMenuProps {
 }
 
 const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
+  const navigate = useNavigate();
+
   const SignOut = async () => {
     console.log("signOut Clicked");
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.log(error);
     }
+    navigate("/");
+    window.location.reload();
   };
 
   return (

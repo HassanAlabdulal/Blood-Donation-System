@@ -53,9 +53,7 @@ export default function ShowProfile() {
       setUser(data.user)
       await getMedicalHistory()
       await getProfile()
-
-    }
-    
+    } 
   }
 
   const getProfile = async () => {
@@ -73,7 +71,7 @@ export default function ShowProfile() {
         phoneNumber: data[0].phone,
         bloodType: data[0].bloodType,
         dateOfBirth: data[0].DoB,
-        age: 33,
+        age: 33, //TO BE
         weight: data[0].weight,
         address: data[0].country +" - "+ data[0].city +" - "+ data[0].street +" - "+ data[0].postalCode,
         medicalHistory:diseases,

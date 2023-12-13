@@ -1,38 +1,106 @@
 import React, { useState, useEffect } from "react";
+import { useParams  } from "react-router-dom";
+import { supabase } from "../utils/supabase";
 
-export default function EditProfileAdmin() {
   // Provided user profile data
-  const userProfile = {
-    userId: "1112223334",
-    name: "Abdullah Mohammed",
-    email: "Abdullah2@gmail.com",
-    phoneNumber: "557592000",
-    bloodType: "A+",
-    dateOfBirth: "1990-01-01",
-    age: "33",
-    weight: "70",
-    address: "123 Main Street",
-    medicalHistory: "None",
-    otherMedicalHistory: "",
+  type userProfile = {
+    userId: string;
+    name: string;
+    email: string;
+    phoneNumber: string;
+    bloodType: string;
+    dateOfBirth: string;
+    age: number;
+    weight: number;
+    address: string;
+    medicalHistory: string;
   };
+  
+  export default function EditProfileAdmin() {
+    // Provided user profile data
+    const params = useParams();
+    const [ diseases , setDiseases] = useState("")
+    const [userProfile, setUserProfile] = useState<userProfile >(
+      {
+        userId: "LOADING...",
+        name: "LOADING...",
+        email: "LOADING...",
+        phoneNumber: "LOADING...",
+        bloodType: "LOADING...",
+        dateOfBirth: Date.now().toString(),
+        age: 0,
+        weight: 0,
+        address: "LOADING...",
+        medicalHistory: "LOADING...",
+      }
+    )
+  
+    // Example user profile data
+    useEffect(() => {
+      console.log(params.id)
+      getMedicalHistory();
+      getProfile();
+    });
+  
+    
+  
+    const getProfile = async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select()
+        .eq("id", params.id);
+  
+        if (data){
+          setUserProfile({
+            userId: data[0].id,
+            name: data[0].full_name,
+            email: data[0].username,
+            phoneNumber: data[0].phone,
+            bloodType: data[0].bloodType,
+            dateOfBirth: data[0].DoB,
+            age: 33,
+            weight: data[0].weight,
+            address: data[0].country +" - "+ data[0].city +" - "+ data[0].street +" - "+ data[0].postalCode,
+            medicalHistory:diseases,
+          })
+        }
+      }
+  
+      const getMedicalHistory = async () => {
+        const { data, error } = await supabase
+        .from('MedicalHistory')
+        .select()
+        .eq('patientID', params.id)
+    
+        if(data) {getDiseases()}
+        else {setDiseases("Nothing")}
+      }
+      const getDiseases =async () => {
+        const { data, error } = await supabase
+        .from('Diseases')
+        .select()
+        .eq('medicalPID', params.id)
+    
+        if(data) {
+          setDiseases(data.map(d => d.Disease).toString())
+        }
+        else {setDiseases("Nothing")}
+      }
 
   // State variables initialized with userProfile data
   const [userId, setUserId] = useState(userProfile.userId);
   const [name, setName] = useState(userProfile.name);
   const [email, setEmail] = useState(userProfile.email);
-  const [phoneNumber, setPhoneNumber] = useState(userProfile.phoneNumber);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [bloodType, setBloodType] = useState(userProfile.bloodType);
   const [dateOfBirth, setDateOfBirth] = useState(userProfile.dateOfBirth);
-  const [age, setAge] = useState<number>(parseInt(userProfile.age));
+  const [age, setAge] = useState<number>(0);
   const [weight, setWeight] = useState(userProfile.weight);
   const [address, setAddress] = useState(userProfile.address);
   const [medicalHistory, setMedicalHistory] = useState(
     userProfile.medicalHistory
   );
-  const [otherMedicalHistory, setOtherMedicalHistory] = useState(
-    userProfile.otherMedicalHistory
-  );
-
+ 
   useEffect(() => {
     // Recalculate age whenever the date of birth changes
     const calculateAge = (dob: string | number | Date): number => {
@@ -66,25 +134,25 @@ export default function EditProfileAdmin() {
     "Other",
   ];
 
-  const handleNumericInputChange =
-    (
-      setterFunction: {
-        (value: React.SetStateAction<string>): void;
-        (value: React.SetStateAction<string>): void;
-        (value: React.SetStateAction<string>): void;
-        (arg0: any): void;
-      },
-      maxLength: number
-    ) =>
-    (event: { target: { value: any } }) => {
-      const value = event.target.value;
-      if (
-        (value === "" || /^[0-9\b]+$/.test(value)) &&
-        value.length <= maxLength
-      ) {
-        setterFunction(value);
-      }
-    };
+  // const handleNumericInputChange =
+  //   (
+  //     setterFunction: {
+  //       (value: React.SetStateAction<string>): void;
+  //       (value: React.SetStateAction<string>): void;
+  //       (value: React.SetStateAction<string>): void;
+  //       (arg0: any): void;
+  //     },
+  //     maxLength: number
+  //   ) =>
+  //   (event: { target: { value: any } }) => {
+  //     const value = event.target.value;
+  //     if (
+  //       (value === "" || /^[0-9\b]+$/.test(value)) &&
+  //       value.length <= maxLength
+  //     ) {
+  //       setterFunction(value);
+  //     }
+  //   };
 
   return (
     <div className="bg-[#f7f7f7] pt-16 flex flex-col justify-center w-full items-center min-h-screen font-roboto">
@@ -104,10 +172,11 @@ export default function EditProfileAdmin() {
                 User ID
               </label>
               <input
+                type="text"
                 className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-300 rounded-md"
                 id="user-id"
                 value={userId}
-                onChange={handleNumericInputChange(setUserId, 10)}
+                onChange={e => setUserId(e.target.value)}
                 placeholder="User ID"
               />
             </div>
@@ -160,11 +229,11 @@ export default function EditProfileAdmin() {
                     +966
                   </span>
                   <input
-                    type="tel"
+                    type="text"
                     className="flex-1 block w-full px-3 py-2 text-gray-700 bg-gray-300 rounded-none rounded-r-md"
                     id="phone-number"
                     value={phoneNumber}
-                    onChange={handleNumericInputChange(setPhoneNumber, 10)}
+                    onChange={e => setPhoneNumber(e.target.value)}
                     placeholder="5X XXX XXXX"
                   />
                 </div>
@@ -204,9 +273,9 @@ export default function EditProfileAdmin() {
                 <input
                   className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-300 rounded-md"
                   id="weight"
-                  type="text"
+                  type="number"
                   value={weight}
-                  onChange={handleNumericInputChange(setWeight, 3)}
+                  onChange={e => setWeight(e.target.valueAsNumber)}
                   placeholder="Weight"
                 />
               </div>
@@ -285,16 +354,7 @@ export default function EditProfileAdmin() {
                   </option>
                 ))}
               </select>
-              {medicalHistory === "Other" && (
-                <textarea
-                  className="block w-full px-3 py-2 mt-4 text-gray-700 bg-gray-300 rounded-md resize-none"
-                  id="other-medical-history"
-                  rows={3}
-                  value={otherMedicalHistory}
-                  onChange={(e) => setOtherMedicalHistory(e.target.value)}
-                  placeholder="Please specify your medical condition"
-                />
-              )}
+              
             </div>
 
             {/* Button Container */}

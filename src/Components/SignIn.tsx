@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import React, { useState, useEffect } from "react";
@@ -7,6 +7,7 @@ import { supabase } from "../utils/supabase";
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -20,7 +21,9 @@ export default function SignIn() {
         throw error;
       }
 
-      const user = data.user;
+      navigate("/");
+      window.location.reload();
+      
     } catch {
       console.error("Error during sign in");
     }

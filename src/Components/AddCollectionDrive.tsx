@@ -1,7 +1,7 @@
 import { Textarea } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { supabase } from "../utils/supabase";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function AddCollectionDrive() {
   const [title, setTitle] = useState("");
@@ -10,6 +10,8 @@ export default function AddCollectionDrive() {
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const navigate = useNavigate();
+
 
   const calculateEndDate = (months: number) => {
     const start = new Date(startDate);
@@ -46,6 +48,9 @@ export default function AddCollectionDrive() {
     if (error) {
       console.log(error);
     }
+
+    navigate("/Main");
+    window.location.reload();
   };
 
   return (
