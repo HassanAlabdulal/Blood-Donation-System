@@ -249,7 +249,7 @@ export default function ShowProfile() {
       </div>
 
       <div className="flex items-center justify-center w-full my-24">
-        <OperationsHistory />
+        <OperationsHistory data={[]} />
       </div>
     </div>
   );

@@ -63,7 +63,7 @@ interface Operation {
   date: string;
 }
 
-export default function OperationsHistory() {
+export default function OperationsHistory({data}:{data: Operation[]}) {
   const sampleDataFromBackend: Operation[] = [
     { type: "Donate", toFrom: "Ali Alabdulal", date: "22/11/2023" },
     { type: "Donate", toFrom: "Hassan Alabdulal", date: "02/09/2021" },

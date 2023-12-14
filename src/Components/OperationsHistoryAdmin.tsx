@@ -11,10 +11,16 @@ import OperationsHistory from "./UI/OperationsHistory";
 //   { type: "Recipient", toFrom: "Abdullah Al Matawah", date: "17/12/2020" },
 // ];
 
+interface Operation {
+  type: string;
+  toFrom: string;
+  date: string;
+}
+
 export default function OperationsHistoryAdmin() {
   return (
     <div className="flex items-center justify-center w-full h-screen bg-[#f7f7f7]">
-      <OperationsHistory />
+      <OperationsHistory data={[]} />
     </div>
   );
 }
