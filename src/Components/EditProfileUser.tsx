@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase";
 import { Link , useParams  } from "react-router-dom";
+import { User } from "@supabase/supabase-js";
 
 type userProfile = {
   userId: string;
@@ -17,7 +18,7 @@ type userProfile = {
 
 export default function EditProfileUser() {
   // Provided user profile data
-  const params = useParams();
+  const [user, setUser] = useState<User | null>(null);
   const [ diseases , setDiseases] = useState("")
   const [userProfile, setUserProfile] = useState<userProfile >(
     {
@@ -36,9 +37,18 @@ export default function EditProfileUser() {
 
   // Example user profile data
   useEffect(() => {
+    getUser()
     getMedicalHistory();
     getProfile();
   });
+  const getUser =async () => {
+    const {data, error} = await supabase.auth.getUser()
+    if(error){console.log("Signed Out")}
+    
+    if (data) {
+      setUser(data.user)
+    } 
+  }
 
   
 
@@ -46,7 +56,7 @@ export default function EditProfileUser() {
     const { data, error } = await supabase
       .from("profiles")
       .select()
-      .eq("id", params);
+      .eq("id", user?.id);
 
       if (data){
         setUserProfile({
@@ -61,6 +71,7 @@ export default function EditProfileUser() {
           address: data[0].country +" - "+ data[0].city +" - "+ data[0].street +" - "+ data[0].postalCode,
           medicalHistory:diseases,
         })
+        // setWeight(data[0].weight)
       }
     }
 
@@ -68,7 +79,7 @@ export default function EditProfileUser() {
       const { data, error } = await supabase
       .from('MedicalHistory')
       .select()
-      .eq('patientID', params)
+      .eq('patientID', user?.id)
   
       if(data) {getDiseases()}
       else {setDiseases("Nothing")}
@@ -77,7 +88,7 @@ export default function EditProfileUser() {
       const { data, error } = await supabase
       .from('Diseases')
       .select()
-      .eq('medicalPID', params)
+      .eq('medicalPID', user?.id)
   
       if(data) {
         setDiseases(data.map(d => d.Disease).toString())
@@ -86,7 +97,7 @@ export default function EditProfileUser() {
     }
   // State variables for editable fields
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [weight, setWeight] = useState(0);
+  const [weight, setWeight] = useState<number>();
   const [address, setAddress] = useState("");
   const [medicalHistory, setMedicalHistory] = useState(
     userProfile.medicalHistory
@@ -209,6 +220,7 @@ export default function EditProfileUser() {
                   className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-200 border-2 border-black rounded-md"
                   id="weight"
                   type="number"
+                  placeholder={userProfile.weight.toString()}
                   value={weight}
                   onChange={(e) => setWeight(e.target.valueAsNumber)}
                 />
@@ -227,7 +239,7 @@ export default function EditProfileUser() {
                 <input
                   className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-200 rounded-md"
                   id="date-of-birth"
-                  type="date"
+                  type="text"
                   value={userProfile.dateOfBirth}
                   disabled
                 />

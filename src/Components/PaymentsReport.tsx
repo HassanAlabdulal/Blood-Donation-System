@@ -1,6 +1,37 @@
+import { useEffect, useState } from "react";
 import TableWithStripedRows from "./UI/TableWithStripedRowsProps";
+import { supabase } from "../utils/supabase";
+
+type PaymentsReports = {
+  full_name: string;
+  deliveryCost: string;
+  paymentDate: string
+}
 
 export default function PaymentsReport() {
+
+  const [paymentsReports , setPaymentsReports] = useState<PaymentsReports[]>([]);
+
+  useEffect(() => {
+    getPaymentsReports()
+  })
+
+  const getPaymentsReports =async () => {
+    const {data , error} = await supabase
+    .from('paymentsreport')
+    .select()
+
+    if ( data ){
+      setPaymentsReports(
+        data.map(e => ({
+          full_name: e.full_name,
+          deliveryCost: e.deliveryCost,
+          paymentDate: e.paymentDate,
+        }))
+      )
+    }
+  }
+
   return (
     <main className="bg-[#f7f7f7] min-h-screen w-full flex flex-col items-center justify-center">
       <div className="mb-24">
@@ -11,33 +42,7 @@ export default function PaymentsReport() {
       <div className="w-2/3">
         <TableWithStripedRows
           headers={["Recipient Name", "Amount (USD)", "Confirmation Date"]}
-          rows={[
-            {
-              PayerName: "John Doe",
-              Amount: "150.00",
-              ConfirmationDate: "2023-01-12",
-            },
-            {
-              PayerName: "Jane Smith",
-              Amount: "200.00",
-              ConfirmationDate: "2023-01-15",
-            },
-            {
-              PayerName: "Bob Johnson",
-              Amount: "350.00",
-              ConfirmationDate: "2023-02-01",
-            },
-            {
-              PayerName: "Alice Brown",
-              Amount: "125.00",
-              ConfirmationDate: "2023-02-05",
-            },
-            {
-              PayerName: "Charlie Davis",
-              Amount: "500.00",
-              ConfirmationDate: "2023-02-20",
-            },
-          ]}
+          rows={paymentsReports}
         />
       </div>
     </main>

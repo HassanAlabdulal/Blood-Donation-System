@@ -1,6 +1,42 @@
+import { useEffect, useState } from "react";
 import TableWithStripedRows from "./UI/TableWithStripedRowsProps";
+import { supabase } from "../utils/supabase";
+
+type BloodDonation = {
+  donorID: string;
+  full_name:string;
+  donationDate: string;
+}
+
 
 export default function BloodDonationsReport() {
+
+  const [bloodDonations, setBloodDonations] = useState<BloodDonation[]>([])
+
+
+
+  useEffect(() => {
+    getBloodDonations()
+  })
+
+  const getBloodDonations =async () => {
+    const {data , error} = await supabase
+    .from('donationspermonthreport')
+    .select()
+
+    if ( data ){
+      setBloodDonations(
+        data.map(e => ({
+          donorID: e.donorID,
+          full_name: e.full_name,
+          donationDate: e.donationDate,
+        }))
+      )
+     
+    }
+  }
+
+
   return (
     <main className="bg-[#f7f7f7] min-h-screen w-full flex flex-col items-center justify-center">
       <div className="mb-24">
@@ -11,16 +47,7 @@ export default function BloodDonationsReport() {
       <div className="w-2/3">
         <TableWithStripedRows
           headers={["ID", "Name", "Received Date"]}
-          rows={[
-            { ID: "123456789", Name: "Hassan", ReceivedDate: "02/01/2023" },
-            { ID: "112345678", Name: "Ali", ReceivedDate: "14/01/2023" },
-            { ID: "123456567", Name: "Hussain", ReceivedDate: "08/01/2023" },
-            { ID: "312341234", Name: "Abdullah", ReceivedDate: "06/01/2023" },
-            { ID: "231234123", Name: "Lutfi", ReceivedDate: "16/01/2023" },
-            { ID: "231234123", Name: "Lutfi", ReceivedDate: "16/01/2023" },
-            { ID: "231234123", Name: "Lutfi", ReceivedDate: "16/01/2023" },
-            { ID: "231234123", Name: "Lutfi", ReceivedDate: "16/01/2023" },
-          ]}
+          rows={bloodDonations}
         />
       </div>
     </main>
