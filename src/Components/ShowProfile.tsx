@@ -24,6 +24,7 @@ type userProfile = {
 
 export default function ShowProfile() {
   const [user, setUser] = useState<User | null>(null)
+  const [age, setAge] = useState(0);
   const [ diseases , setDiseases] = useState("")
   const [userProfile, setUserProfile] = useState<userProfile >(
     {
@@ -71,11 +72,20 @@ export default function ShowProfile() {
         phoneNumber: data[0].phone,
         bloodType: data[0].bloodType,
         dateOfBirth: data[0].DoB,
-        age: 33, //TO BE
+        age: age, //TO BE
         weight: data[0].weight,
         address: data[0].country +" - "+ data[0].city +" - "+ data[0].street +" - "+ data[0].postalCode,
         medicalHistory:diseases,
       })
+    
+    const today = new Date();
+      const birthDate = new Date(data[0].DoB);
+      let age_now = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age_now--;
+      }
+      setAge(age_now);
     }
   }
 
