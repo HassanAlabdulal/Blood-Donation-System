@@ -28,6 +28,22 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
     window.location.reload();
   };
 
+  const handleEditProfile = () => {
+    navigate("/EditProfileUser");
+    window.location.reload();
+  }
+  const handleNotifications = () => { 
+    navigate("/Notification");
+    window.location.reload()
+  }
+
+  const handleMyProfile = () => { 
+    navigate("/ShowProfile");
+    window.location.reload()
+  }
+
+   
+
   return (
     <div
       className={`lg:block ${
@@ -46,9 +62,9 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
         </MenuHandler>
         <MenuList placeholder={undefined}>
           <MenuItem className="flex items-center gap-2" placeholder={undefined}>
-            <Link
-              to="/ShowProfile"
+            <button
               className="flex items-center gap-2 text-left"
+              onClick={handleMyProfile}
             >
               <svg
                 width="16"
@@ -71,11 +87,11 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
               >
                 My Profile
               </Typography>
-            </Link>
+            </button>
           </MenuItem>
           <MenuItem className="flex items-center gap-2" placeholder={undefined}>
-            <Link
-              to="/EditProfileUser"
+            <button
+            onClick={handleEditProfile}
               className="flex items-center gap-2 text-left"
             >
               <svg
@@ -100,11 +116,11 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
               >
                 Edit Profile
               </Typography>
-            </Link>
+            </button>
           </MenuItem>
           <MenuItem className="flex items-center gap-2" placeholder={undefined}>
-            <Link
-              to="/Notification"
+            <button
+            onClick={handleNotifications}
               className="flex items-center gap-2 text-left"
             >
               <svg
@@ -130,7 +146,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ toggled }) => {
               >
                 Notifications
               </Typography>
-            </Link>
+            </button>
           </MenuItem>
 
           <hr className="my-2 border-blue-gray-50" />

@@ -78,7 +78,7 @@ export default function Nav() {
       <motion.div key={1} variants={isMobile ? itemMotion : itemMotionDesktop}>
           <Link to={"/Main"}>{"Home"}</Link>
         </motion.div>
-      {isAdmin && (navLinks.map(({ name, href, id }) => (
+      {/*isAdmin*/ true && (navLinks.map(({ name, href, id }) => (
         <motion.div key={id} variants={isMobile ? itemMotion : itemMotionDesktop}>
           <Link to={href}>{name}</Link>
         </motion.div>

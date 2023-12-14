@@ -23,6 +23,7 @@ import {
   faRoad,
   faHashtag,
 } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 // import { createSupabaseBrowser } from "../utils/supabase.ts";
 const bloodTypes = [
@@ -68,6 +69,8 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
+    const navigate = useNavigate();
+
 
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [age, setAge] = useState<number | "">("");
@@ -213,7 +216,8 @@ const SignUp = () => {
           
         }
       }
-
+      navigate("/");
+      window.location.reload();
     }
     catch{
       console.error("Error during sign up:");

@@ -20,6 +20,8 @@ import {
   CreditCardIcon,
   LockClosedIcon,
 } from "@heroicons/react/24/solid";
+import { useNavigate, useParams } from "react-router-dom";
+import { supabase } from "../utils/supabase";
 
 function formatCardNumber(value: string) {
   const val = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
@@ -52,6 +54,22 @@ export default function Payment() {
   const [type, setType] = React.useState("card");
   const [cardNumber, setCardNumber] = React.useState("");
   const [cardExpires, setCardExpires] = React.useState("");
+  const params = useParams();
+  const navigate = useNavigate();
+
+
+
+  const handleSubmit =async () => {
+    const {  error } = await supabase
+    .from('Donation')
+    .update({ paymentDate: new Date().toLocaleDateString() })
+    .eq('donationId', params.id)
+
+    // console.log(params.id)    
+    // console.log(data)    
+    navigate("/Main");
+    window.location.reload();
+  }
 
   return (
     <div className="flex items-center justify-center w-full h-screen">
@@ -112,7 +130,7 @@ export default function Payment() {
               placeholder={undefined}
             >
               <TabPanel value="card" className="p-0">
-                <form className="flex flex-col gap-4 mt-12">
+                <form className="flex flex-col gap-4 mt-12" >
                   <div>
                     <Typography
                       variant="small"
@@ -220,7 +238,7 @@ export default function Payment() {
                       crossOrigin={undefined}
                     />
                   </div>
-                  <Button size="lg" placeholder={undefined}>
+                  <Button size="lg" placeholder={undefined} onClick={handleSubmit}>
                     Pay Now
                   </Button>
                   <Typography
@@ -314,7 +332,7 @@ export default function Payment() {
                       crossOrigin={undefined}
                     />
                   </div>
-                  <Button size="lg" placeholder={undefined}>
+                  <Button size="lg" placeholder={undefined} onClick={handleSubmit}>
                     pay with paypal
                   </Button>
                   <Typography

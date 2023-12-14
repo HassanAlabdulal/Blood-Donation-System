@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faDollarSign } from "@fortawesome/free-solid-svg-icons";
 import notificationImage from "../Assets/notification.gif";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
 import { User } from "@supabase/supabase-js";
 
 interface NotificationType {
-  id: number;
+  id: string;
   type: string;
   from: string;
-  date: string;
   isCompleted: boolean;
+  recipientBT: string;
 }
 
 interface NotificationItemProps {
@@ -35,24 +35,23 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     <tr className="border-b">
       <td className="px-5 py-3 text-center">{notification.type}</td>
       <td className="px-5 py-3 text-center">{notification.from}</td>
-      <td className="px-5 py-3 text-center">{notification.date}</td>
       <td className="px-5 py-3">
         <div className="flex items-center justify-center">
           {notification.isCompleted ? (
             <FontAwesomeIcon icon={faCheck} className="text-green-500" />
-          ) : notification.type === "Request for Donate" ? (
-            <Link
+          ) : notification.type === "Payment" ? (
+            <button
               className={payButtonClass}
               onClick={() => onPay(notification)}
-              to="/Payment"
+              // to="/Payment"
             >
               <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
               Pay
-            </Link>
+            </button>
           ) : (
             <button
               className={acceptButtonClass}
-              onClick={() => onAccept(notification)}
+              onClick={() =>  onAccept(notification)}
             >
               <FontAwesomeIcon icon={faCheck} className="mr-2" />
               Accept
@@ -63,37 +62,60 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     </tr>
   );
 };
+
+const bloodTypeCompatibility: Record<string, string[]> = {
+  'A+': ['A+', '+A', 'A-', '-A', 'O+', '+O', 'O-', '-O'],
+  '+A': ['A+', '+A', 'A-', '-A', 'O+', '+O', 'O-', '-O'],
+  'A-': ['A-', '-A', 'O-', '-O'],
+  '-A': ['A-', '-A', 'O-', '-O'],
+
+  'B+': ['B+', '+B', 'B-', '-B', 'O+', '+O', 'O-', '-O'],
+  '+B': ['B+', '+B', 'B-', '-B', 'O+', '+O', 'O-', '-O'],
+  'B-': ['B-', '-B', 'O-', '-O'],
+  '-B': ['B-', '-B', 'O-', '-O'],
+
+  'AB+': ['AB+', '+AB', 'AB-', '-AB', 'A+', '+A', 'A-', '-A', 'B+', '+B', 'B-', '-B', 'O+', '+O', 'O-', '-O'],
+  '+AB': ['AB+', '+AB', 'AB-', '-AB', 'A+', '+A', 'A-', '-A', 'B+', '+B', 'B-', '-B', 'O+', '+O', 'O-', '-O'],
+  'AB-': ['AB-', '-AB', 'A-', '-A', 'B-', '-B', 'O-', '-O'],
+  '-AB': ['AB-', '-AB', 'A-', '-A', 'B-', '-B', 'O-', '-O'],
+
+  'O+': ['O+', '+O', 'O-', '-O'],
+  '+O': ['O+', '+O', 'O-', '-O'],
+  'O-': ['O-', '-O'],
+  '-O': ['O-', '-O']
+};
 export default function Notification() {
 
-  const [isRecipient, setIsRecipient] = useState(false)
-  const [user, setUser] = useState<User | null>(null)
+  const [isRecipient, setIsRecipient] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [recipientBT, setRecipientBT] = useState("");
+  const [donationDates, setDonationDates] = useState<Date[]>([]);
+  const navigate = useNavigate();
+
 
   
   
   const [notifications, setNotifications] = useState<NotificationType[]>([
     {
-      id: 1,
-      type: "Request for Donate",
+      id: "1",
+      type: "Payment",
       from: "Hassan Alabdulal",
-      date: "24/05/2023",
       isCompleted: false,
+      recipientBT: ""
     },
     {
-      id: 2,
-      type: "Request for Recipient",
+      id: "2",
+      type: "Donating",
       from: "Abdullah Al Matawah",
-      date: "26/05/2023",
       isCompleted: false,
+      recipientBT: "O+"
     },
   ]);
 
   useEffect(() => {
-    getIsRecipient()
     getUser()
+    getIsRecipient()
     getNotifications()
-    // console.log(recipientIds)
-    // console.log(donorsIds)
-    
  })
 
 
@@ -102,14 +124,50 @@ export default function Notification() {
     .from('Recipient')
     .select()
 
+
     if (data){
-      setIsRecipient(data.includes(user?.id))
+      setIsRecipient(data.map(e => (e.PatientId)).includes(user?.id))
     }
   }
 
   const getNotifications = async () => {
-      if (isRecipient){}
-      else{}
+      if (isRecipient){
+        const { data, error } = await supabase
+        .from('donationnotification_r')
+        .select()
+        // .eq('recipientID', user?.id)
+
+        
+        if (data){
+          setNotifications(
+            data.map(e => ({
+              id: e.donationId,
+              type: "Payment",
+              from: e.full_name,
+              isCompleted: false,
+              recipientBT: ""
+            }))
+          )
+        }
+      }
+      else{
+        const { data, error } = await supabase
+        .from('donationnotification_d')
+        .select()
+
+        if (data){
+          setNotifications(
+            data.map(e => ({
+              id: e.donationId,
+              type: "Donating",
+              from: e.full_name,
+              isCompleted: false,
+              recipientBT: e.bloodType
+            }))
+          )
+          
+        }
+      }
   }
 
 
@@ -119,22 +177,110 @@ export default function Notification() {
     setUser(data.user)
   }
 
+ 
 
-  const handleAccept = (notification: { id: number }) => {
-    setNotifications((currentNotifications) =>
-      currentNotifications.map((notif) =>
-        notif.id === notification.id ? { ...notif, isCompleted: true } : notif
-      )
-    );
+
+  const handleAccept = async (notification: { id: string }) => {
+    // setNotifications((currentNotifications) =>
+    //   currentNotifications.map((notif) =>
+    //     notif.id === notification.id ? { ...notif, isCompleted: true } : notif
+    //   )
+    // );
+    const RBT = notifications.find(notif => notif.id === notification.id)?.recipientBT!;
+    const {data , error} = await supabase
+    .from('profiles')
+    .select()
+    .eq('id', user?.id)
+
+    if (data){
+      console.log(data[0])
+      const DoB = new Date(data[0].DoB);
+      const weight = data[0].weight;
+      const DBT = data[0].bloodType;
+      await getDonationDates()
+
+      if (hasSixMonthsPassed(donationDates) 
+      && isSeventeenOrOlder(DoB)
+      && weight >= 51.71
+      && isBTDonater(RBT, DBT))
+      {
+        const {  error } = await supabase
+        .from('Donation')
+        .update({ 
+          donationDate: new Date().toLocaleDateString(),
+          donorID: user?.id
+         })
+        .eq('donationId', notification.id)
+
+    // console.log(params.id)    
+    // console.log(data)    
+    navigate("/Main");
+    window.location.reload(); 
+      }
+      else{alert("You can not donate ether because of\n- Your Age\n- Your weight\n- Your Blood Type\n- Your Last donation is not far")}
+
+      
+    }
+
+
+
+    // navigate("/Main");
+    // window.location.reload();
   };
 
-  const handlePay = (notification: { id: number }) => {
-    setNotifications((currentNotifications) =>
-      currentNotifications.map((notif) =>
-        notif.id === notification.id ? { ...notif, isCompleted: true } : notif
-      )
-    );
+  const handlePay = (notification: { id: string }) => {
+
+    navigate("/Payment/"+ notification.id );
+
   };
+
+  function isSeventeenOrOlder(dob: Date): boolean {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const dobYear = dob.getFullYear();
+    let age = currentYear - dobYear;
+    const currentMonth = today.getMonth();
+    const dobMonth = dob.getMonth();
+    if (currentMonth < dobMonth || (currentMonth === dobMonth && today.getDate() < dob.getDate())) {
+      age--;
+    }
+    return age >= 17;
+  }
+
+  function isBTDonater(RBT: string, DBT: string): boolean {
+    return bloodTypeCompatibility[RBT].includes(DBT);
+  }
+
+  function hasSixMonthsPassed(dates: Date[]): boolean {
+    if (dates.length === 0) {return true;}
+    const today = new Date();
+    const sortedDates = dates.sort((a, b) => Math.abs(today.getTime() - a.getTime()) - Math.abs(today.getTime() - b.getTime()));
+    const nearestDate = sortedDates[0];
+    const monthDiff = (today.getFullYear() - nearestDate.getFullYear()) * 12 + today.getMonth() - nearestDate.getMonth();
+    return monthDiff >= 6 || (monthDiff === 5 && today.getDate() >= nearestDate.getDate());
+  }
+
+  const getDonationDates =async () => {
+    const {data , error} = await supabase
+    .from('donateddonations')
+    .select('donationDate')
+    .eq('donorID', user?.id)
+
+    if(data){ 
+
+    setDonationDates(data.filter(e => e.donationDate != null).map(e => new Date(e.donationDate)))
+
+
+    }
+
+
+
+
+
+
+
+  }
+  
 
   return (
     <div className="bg-[#f7f7f7] pt-16 flex flex-col items-center justify-center min-h-screen font-roboto">
@@ -156,8 +302,8 @@ export default function Notification() {
           <thead>
             <tr className="border-b">
               <th className="px-5 py-3 text-center">Type</th>
-              <th className="px-5 py-3 text-center">From / For</th>
-              <th className="px-5 py-3 text-center">Date</th>
+              {isRecipient && (<th className="px-5 py-3 text-center">From</th>)}
+              {!isRecipient && (<th className="px-5 py-3 text-center">For</th>)}
               <th className="px-5 py-3 text-center">Action</th>
             </tr>
           </thead>
