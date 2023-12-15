@@ -55,6 +55,7 @@
 // export default OperationsHistory;
 
 import React, { useState, useEffect } from "react";
+import { supabase } from "../../utils/supabase";
 
 // Define the type for a single operation
 interface Operation {
@@ -63,21 +64,42 @@ interface Operation {
   date: string;
 }
 
-export default function OperationsHistory({data}:{data: Operation[]}) {
-  const sampleDataFromBackend: Operation[] = [
-    { type: "Donate", toFrom: "Ali Alabdulal", date: "22/11/2023" },
-    { type: "Donate", toFrom: "Hassan Alabdulal", date: "02/09/2021" },
-    { type: "Recipient", toFrom: "Abdullah Al Matawah", date: "17/12/2020" },
-  ];
+export default function OperationsHistory({id}:{id: string}) {
 
-  // Initialize state with the type of Operation array
-  const [operations, setOperations] = useState<Operation[]>([]);
+  const [operationsHistory, setOperationsHistory] = useState<Operation[]>();
+  const [isRecipient , setIsRecipient ] = useState(false);
+
+
 
   useEffect(() => {
-    // Here you would fetch the data from the backend
-    // For now, we'll use the sample data
-    setOperations(sampleDataFromBackend);
-  }, []);
+    getIsRecipient()
+    getOperationsHistory()
+  });
+
+  const getIsRecipient =async () => {
+    const {data , error} = await supabase
+    .from("Recipient")
+    .select()
+    .eq("PatientId", id)
+    if ( data ){ if ( data.length>0 ){setIsRecipient(true)} }
+  }
+
+  const getOperationsHistory =async () => {
+    const {data, error} = await supabase
+    .from('operationshistory')
+    .select()
+    .eq(isRecipient ? 'recipientID': 'donorID' , id)
+
+    if ( data ){
+      setOperationsHistory(
+        data.map(e => ({
+          type : isRecipient ? 'Recipient': 'Donate',
+          toFrom : isRecipient ? e.donor_full_name: e.recipient_full_name,
+          date : e.donationDate
+        }))
+      )
+    }
+  }
 
   return (
     <div className="bg-[#f7f7f7] w-full justify-center flex flex-col items-center">
@@ -91,16 +113,19 @@ export default function OperationsHistory({data}:{data: Operation[]}) {
               <th className="px-4 py-2 text-center bg-gray-100 border-b-2 border-gray-200">
                 Type
               </th>
-              <th className="px-4 py-2 text-center bg-gray-100 border-b-2 border-gray-200">
-                To/From
-              </th>
+              {isRecipient && (<th className="px-4 py-2 text-center bg-gray-100 border-b-2 border-gray-200">
+                From
+              </th>)}
+              {!isRecipient && (<th className="px-4 py-2 text-center bg-gray-100 border-b-2 border-gray-200">
+                To
+              </th>)}
               <th className="px-4 py-2 text-center bg-gray-100 border-b-2 border-gray-200">
                 Date
               </th>
             </tr>
           </thead>
           <tbody>
-            {operations.map((operation, index) => (
+            {operationsHistory?.map((operation, index) => (
               <tr key={index}>
                 <td className="px-4 py-2 text-center border-b border-gray-200">
                   {operation.type}

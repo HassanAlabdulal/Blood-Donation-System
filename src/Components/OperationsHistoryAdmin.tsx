@@ -1,4 +1,6 @@
+import { useParams } from "react-router-dom";
 import OperationsHistory from "./UI/OperationsHistory";
+import { useEffect } from "react";
 
 // const sampleDataFromBackend = [
 //   { type: "Donate", toFrom: "Ali Alabdulal", date: "22/11/2023" },
@@ -11,16 +13,12 @@ import OperationsHistory from "./UI/OperationsHistory";
 //   { type: "Recipient", toFrom: "Abdullah Al Matawah", date: "17/12/2020" },
 // ];
 
-interface Operation {
-  type: string;
-  toFrom: string;
-  date: string;
-}
 
 export default function OperationsHistoryAdmin() {
+  const params = useParams();
   return (
     <div className="flex items-center justify-center w-full h-screen bg-[#f7f7f7]">
-      <OperationsHistory data={[]} />
+      <OperationsHistory id={params.id!}  />
     </div>
   );
 }

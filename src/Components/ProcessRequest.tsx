@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase";
 import { Link, useNavigate } from "react-router-dom";
+import { User } from "@supabase/supabase-js";
 
 type Recipient = {
   id: string;
@@ -24,6 +25,8 @@ type DonationEvent = {
   category: string;
 };
 export default function ProcessRequest() {
+  const [user, setUser] = useState<User | null>(null)
+
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -70,18 +73,13 @@ export default function ProcessRequest() {
     }
   };
 
-  const handleSelectRecipient = (recipient: Recipient) => {
-    setRecipientIdInput(recipient.id);
-    setRecipientData(recipient);
-    setShowSuggestions(false);
-  };
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     // Handle the form submission
     const { error } = await supabase.from("Donation").insert({
       deliveryCost,
-      adminId: "70d7059d-3581-451a-811a-002236cb91bf", // TO BE Done
+      adminId: user?.id,
       recipientID,
       eventId: selectedEvent,
     });
@@ -92,7 +90,13 @@ export default function ProcessRequest() {
 
     navigate("/Main");
   };
-
+  const getUser =async () => {
+    const {data, error} = await supabase.auth.getUser()
+    if(error){console.log("Signed Out")}
+    if (data) {
+      setUser(data.user)
+    } 
+  }
   const fetchEvents = async () => {
     const { data, error } = await supabase.from("DonationEvent").select();
 
@@ -115,6 +119,7 @@ export default function ProcessRequest() {
   };
 
   useEffect(() => {
+    getUser()
     fetchEvents()
       .then((events) => {
         setEvents(events.map((e) => ({ id: e.id, name: e.name })));

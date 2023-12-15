@@ -41,7 +41,7 @@ function App() {
           <Route path="/NewPassword" element={<NewPassword />} />
           <Route path="/Notification" element={<Notification />} />
           <Route
-            path="/OperationsHistoryAdmin"
+            path="/OperationsHistoryAdmin/:id"
             element={<OperationsHistoryAdmin />}
           />
           <Route path="/ProcessRequest" element={<ProcessRequest />} />

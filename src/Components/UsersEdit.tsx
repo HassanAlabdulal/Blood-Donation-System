@@ -144,7 +144,7 @@ export default function UsersEdit() {
                     {!adminsIds.includes(user.id)&&(<div className="flex justify-center space-x-2">
                       {/* History Anchor */}
                       <Link
-                        to="/OperationsHistoryAdmin"
+                        to= {"/OperationsHistoryAdmin/" + user.id}
                         className="inline-flex items-center px-4 py-2 font-bold text-white bg-[#292828] rounded hover:bg-black transition-all duration-700"
                       >
                         <FontAwesomeIcon icon={faHistory} className="mr-2" />

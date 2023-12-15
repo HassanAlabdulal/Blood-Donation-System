@@ -213,9 +213,7 @@ export default function Notification() {
         .eq('donationId', notification.id)
 
     // console.log(params.id)    
-    // console.log(data)    
-    navigate("/Main");
-    window.location.reload(); 
+    // console.log(data)   
       }
       else{alert("You can not donate ether because of\n- Your Age\n- Your weight\n- Your Blood Type\n- Your Last donation is not far")}
 
@@ -224,8 +222,8 @@ export default function Notification() {
 
 
 
-    // navigate("/Main");
-    // window.location.reload();
+    navigate("/Main");
+    window.location.reload();
   };
 
   const handlePay = (notification: { id: string }) => {
@@ -270,15 +268,7 @@ export default function Notification() {
 
     setDonationDates(data.filter(e => e.donationDate != null).map(e => new Date(e.donationDate)))
 
-
     }
-
-
-
-
-
-
-
   }
   
 

@@ -51,7 +51,7 @@ export default function LearnMore() {
               beacon of hope.
             </p>
             <div className="flex items-center gap-3">
-              <Link
+              {/* <Link
                 to="/SignUp"
                 className="flex select-none items-center justify-center cursor-pointer
                  rounded-lg bg-[#292828] border-2 border-[#292828] px-[1.693rem]
@@ -61,7 +61,7 @@ export default function LearnMore() {
                 data-ripple-dark="true"
               >
                 Sign up
-              </Link>
+              </Link> */}
 
               <a
                 className="flex select-none items-center justify-center rounded-lg border-2 border-[#292828]
