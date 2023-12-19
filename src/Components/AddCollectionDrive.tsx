@@ -1,7 +1,8 @@
 import { Textarea } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
 import { Link, useNavigate } from "react-router-dom";
+import { User } from "@supabase/supabase-js";
 
 export default function AddCollectionDrive() {
   const [title, setTitle] = useState("");
@@ -11,6 +12,20 @@ export default function AddCollectionDrive() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const navigate = useNavigate();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    getUser()
+  })
+
+  const getUser =async () => {
+    const {data, error} = await supabase.auth.getUser()
+    if(error){console.log("Signed Out")}
+    
+    if (data) {
+      setUser(data.user)
+    } 
+  }
 
 
   const calculateEndDate = (months: number) => {
@@ -41,7 +56,7 @@ export default function AddCollectionDrive() {
       location,
       title,
       description,
-      adminId: "70d7059d-3581-451a-811a-002236cb91bf", // TO BE Done
+      adminId: user?.id,
       category,
     });
 
