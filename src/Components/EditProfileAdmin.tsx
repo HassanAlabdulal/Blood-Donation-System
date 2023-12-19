@@ -12,7 +12,10 @@ import { supabase } from "../utils/supabase";
     dateOfBirth: string;
     age: number;
     weight: number;
-    address: string;
+    country: string;
+    city: string;
+    street: string;
+    postalCode: string;
     medicalHistory: string;
   };
   
@@ -30,14 +33,17 @@ import { supabase } from "../utils/supabase";
         dateOfBirth: Date.now().toString(),
         age: 0,
         weight: 0,
-        address: "LOADING...",
+        country: "LOADING...",
+        city: "LOADING...",
+        street: "LOADING...",
+        postalCode: "LOADING...",
         medicalHistory: "LOADING...",
       }
     )
   
     // Example user profile data
     useEffect(() => {
-      console.log(params.id)
+      // console.log(params.id)
       getMedicalHistory();
       getProfile();
     });
@@ -58,12 +64,23 @@ import { supabase } from "../utils/supabase";
             phoneNumber: data[0].phone,
             bloodType: data[0].bloodType,
             dateOfBirth: data[0].DoB,
-            age: 33,
+            age: age,
             weight: data[0].weight,
-            address: data[0].country +" - "+ data[0].city +" - "+ data[0].street +" - "+ data[0].postalCode,
-            medicalHistory:diseases,
+            country: data[0].country,
+            city: data[0].city,
+            street: data[0].street,
+            postalCode: data[0].postalCode,            medicalHistory:diseases,
           })
+          const today = new Date();
+          const birthDate = new Date(data[0].DoB);
+          let age_now = today.getFullYear() - birthDate.getFullYear();
+          const m = today.getMonth() - birthDate.getMonth();
+          if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age_now--;
+          }
+          setAge(age_now);
         }
+        
       }
   
       const getMedicalHistory = async () => {
@@ -96,26 +113,28 @@ import { supabase } from "../utils/supabase";
   const [dateOfBirth, setDateOfBirth] = useState(userProfile.dateOfBirth);
   const [age, setAge] = useState<number>(0);
   const [weight, setWeight] = useState(userProfile.weight);
-  const [address, setAddress] = useState(userProfile.address);
-  const [medicalHistory, setMedicalHistory] = useState(
+  const [country, setCountry] = useState<string>();
+  const [city, setCity] = useState<string>();
+  const [street, setStreet] = useState<string>();
+  const [pCode, setPCode] = useState<string>();  const [medicalHistory, setMedicalHistory] = useState(
     userProfile.medicalHistory
   );
  
-  useEffect(() => {
-    // Recalculate age whenever the date of birth changes
-    const calculateAge = (dob: string | number | Date): number => {
-      const today = new Date();
-      const birthDate = new Date(dob);
-      let age_now = today.getFullYear() - birthDate.getFullYear();
-      const m = today.getMonth() - birthDate.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age_now--;
-      }
-      return age_now;
-    };
+  // useEffect(() => {
+  //   // Recalculate age whenever the date of birth changes
+  //   const calculateAge = (dob: string | number | Date): number => {
+  //     const today = new Date();
+  //     const birthDate = new Date(dob);
+  //     let age_now = today.getFullYear() - birthDate.getFullYear();
+  //     const m = today.getMonth() - birthDate.getMonth();
+  //     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+  //       age_now--;
+  //     }
+  //     return age_now;
+  //   };
 
-    setAge(calculateAge(dateOfBirth));
-  }, [dateOfBirth]);
+  //   setAge(calculateAge(dateOfBirth));
+  // }, [dateOfBirth]);
 
   const getMaxDate = () => {
     const today = new Date();
@@ -124,35 +143,20 @@ import { supabase } from "../utils/supabase";
 
   const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
-  const diseasesPreventingDonation = [
-    "None",
-    "Hepatitis B or C",
-    "HIV/AIDS",
-    "Heart Disease",
-    "Hemochromatosis",
-    "Blood Cancers",
-    "Other",
-  ];
+  const [diseasesPreventingDonation, setDiseasesPreventingDonation] = useState([
+    "-",
+    "Allergies",
+    "Asthma",
+    "Bleeding Conditions",
+    "High Blood Pressure" ,
+    "Cancer" ,
+    "Chronic Illnesses" ,
+    "Hepatitis/Jaundice" ,
+    "HIV/AIDS" ,
+    "Malaria" ,
+  ])
 
-  // const handleNumericInputChange =
-  //   (
-  //     setterFunction: {
-  //       (value: React.SetStateAction<string>): void;
-  //       (value: React.SetStateAction<string>): void;
-  //       (value: React.SetStateAction<string>): void;
-  //       (arg0: any): void;
-  //     },
-  //     maxLength: number
-  //   ) =>
-  //   (event: { target: { value: any } }) => {
-  //     const value = event.target.value;
-  //     if (
-  //       (value === "" || /^[0-9\b]+$/.test(value)) &&
-  //       value.length <= maxLength
-  //     ) {
-  //       setterFunction(value);
-  //     }
-  //   };
+
 
   return (
     <div className="bg-[#f7f7f7] pt-16 flex flex-col justify-center w-full items-center min-h-screen font-roboto">
@@ -175,9 +179,9 @@ import { supabase } from "../utils/supabase";
                 type="text"
                 className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-300 rounded-md"
                 id="user-id"
-                value={userId}
-                onChange={e => setUserId(e.target.value)}
-                placeholder="User ID"
+                
+                placeholder={userId}
+                disabled
               />
             </div>
 
@@ -293,10 +297,10 @@ import { supabase } from "../utils/supabase";
                 <input
                   className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-300 rounded-md"
                   id="date-of-birth"
-                  type="date"
+                  type="text"
                   max={getMaxDate()} // Prevent future dates
-                  value={dateOfBirth}
-                  onChange={(e) => setDateOfBirth(e.target.value)}
+                  value={userProfile.dateOfBirth}
+                  disabled
                 />
               </div>
               <div className="flex-1">
@@ -317,21 +321,74 @@ import { supabase } from "../utils/supabase";
             </div>
 
             {/* Address */}
-            <div>
-              <label
-                className="block text-sm font-medium text-gray-700"
-                htmlFor="address"
-              >
-                Address
-              </label>
-              <textarea
-                className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-300 rounded-md resize-none"
-                id="address"
-                rows={3}
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="Address"
-              />
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label
+                  className="block text-sm font-medium text-gray-700"
+                  htmlFor="text"
+                >
+                  Country
+                </label>
+                <input
+                  className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-200 rounded-md"
+                  id="country"
+                  type="text"
+                  value={country}
+                  onChange={e => setCountry(e.target.value)}
+                  placeholder= {userProfile.country}
+                  
+                />
+              </div>
+              <div className="flex-1">
+                <label
+                  className="block text-sm font-medium text-gray-700"
+                  htmlFor="text"
+                >
+                  City
+                </label>
+                <input
+                  type="text"
+                  className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-200 border-2 border-black rounded-md"
+                  id="city"
+                  placeholder={userProfile.city}
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                />
+              </div>
+              <div className="flex-1">
+                <label
+                  className="block text-sm font-medium text-gray-700"
+                  htmlFor="text"
+                >
+                  Street
+                </label>
+                <input
+                  type="text"
+                  className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-200 border-2 border-black rounded-md"
+                  id="street"
+                  value={street}
+                  placeholder={userProfile.street}
+                  onChange={(e) => setStreet(e.target.value)}
+                />
+              </div>
+              <div className="flex-1">
+                <label
+                  className="block text-sm font-medium text-gray-700"
+                  htmlFor="text"
+                >
+                  Postal Code
+                </label>
+                <input
+                  type="text"
+                  className="block w-full px-3 py-2 mt-1 text-gray-700 bg-gray-200 border-2 border-black rounded-md"
+                  id="pCode"
+                  placeholder={userProfile.postalCode}
+                  value={pCode}
+                  onChange={(e) => setPCode(e.target.value)}
+                />
+              </div>
+
+              
             </div>
 
             {/* Medical History */}
