@@ -46,7 +46,7 @@ export default function Nav() {
   useEffect(() => {
     getUser()
     getIsAdmin()
-  })
+  }, [])
 
   const getUser =async () => {
     const {data, error} = await supabase.auth.getUser()

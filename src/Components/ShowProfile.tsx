@@ -44,7 +44,7 @@ export default function ShowProfile() {
   // Example user profile data
   useEffect(() => {
     getUser()
-  })
+  },[])
 
   const getUser =async () => {
     const {data, error} = await supabase.auth.getUser()

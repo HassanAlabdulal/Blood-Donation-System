@@ -47,7 +47,7 @@ export default function EditProfileUser() {
     getUser()
     getMedicalHistory();
     getProfile();    
-  });
+  },[]);
   const getUser =async () => {
     const {data, error} = await supabase.auth.getUser()
     if(error){console.log("Signed Out")}

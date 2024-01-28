@@ -28,7 +28,7 @@ export default function UsersEdit() {
   useEffect(() => {
      getAdminsIds()
      getUserProfile()
-  })
+  },[])
 
   const getAdminsIds =async () => {
     const {data, error }= await supabase

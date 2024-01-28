@@ -12,7 +12,7 @@ export default function CollectionDriveReport() {
 
   useEffect(() => {
     getCollectionDriveReport()
-  })
+  },[])
 
   const getCollectionDriveReport =async () => {
     const {data , error} = await supabase

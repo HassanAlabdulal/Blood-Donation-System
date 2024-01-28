@@ -14,7 +14,7 @@ export default function AggregatedAmountReport() {
 
   useEffect(() => {
     getAggregatedAmount()
-  })
+  },[])
 
   const getAggregatedAmount =async () => {
     const {data , error} = await supabase

@@ -14,7 +14,7 @@ export default function PaymentsReport() {
 
   useEffect(() => {
     getPaymentsReports()
-  })
+  },[])
 
   const getPaymentsReports =async () => {
     const {data , error} = await supabase

@@ -48,7 +48,7 @@ type userProfile = {
     // getUserProfile()
     getMedicalHistory();
     getProfile();    
-  });
+  },[]);
 
 
 

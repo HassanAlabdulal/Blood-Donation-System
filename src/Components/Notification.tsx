@@ -116,7 +116,7 @@ export default function Notification() {
     getUser()
     getIsRecipient()
     getNotifications()
- })
+ }, [])
 
 
   const getIsRecipient =async () => {
